@@ -1,0 +1,502 @@
+{% load selectable_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Taste Preference</title>
+
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+  <!-- Those are for the use of autocomplete form -->
+  <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/themes/base/jquery-ui.css" type="text/css">
+  <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/dj.selectable.css" />
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+  <script src="{{ STATIC_URL }}js/jquery.dj.selectable.js"></script>
+  <script src="{{ STATIC_URL }}js/typeahead.bundle.js"></script>
+  <link href="{{ STATIC_URL }}font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}css/customCSS.css" rel="stylesheet">
+  <link href="{{ STATIC_URL}}css/typeahead.css" rel="stylesheet">
+  <!-- Latest compiled and minified JavaScript -->
+  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/demo.css" />
+  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/style.css" />
+  <script type="text/javascript" src="{{STATIC_URL}}js/modernizr.custom.04022.js"></script>
+
+  <!-- JS files -->
+  <script src="{{STATIC_URL}}js/check.js"></script>
+
+  <!-- For dropdown menu -->
+  <script src="{{ STATIC_URL }}js/bootstrap-select.js"></script>
+  <link href="{{ STATIC_URL }}css/bootstrap-select.css" rel="stylesheet">
+
+  <!-- For picture cropping -->
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/cropboxstyle.css" type="text/css" />
+  
+  <style>       
+  .action
+  {
+    width: 400px;
+    height: 30px;
+    margin: 10px 0;
+  }
+  .cropped>img
+  {
+    margin-right: 10px;
+  }
+  </style>
+
+  <!-- For tooltip -->
+  <script>
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+  </script>
+
+  </head>
+
+  <!-- A script for autocomplete tabs -->
+
+  <script type="text/javascript">
+  $(document).ready(function() {
+    $(':input[name=my_field_0]').bind('djselectableselect', function(event, ui) {
+      $(this).parents("form").submit();
+
+    }
+    );
+
+    function newParameters(query) {
+      query.category_1 = $('#id_category_1').val();
+      query.category_2 = $('#id_category_2').val();
+      query.ingredient = $('#id_ingredient').val();
+    }
+
+    $('#id_autocomplete').djselectable('option', 'prepareQuery', newParameters);
+
+    function formatLabel(label, item) {
+      var data = label;
+      return '<img src="/foodchaser/recipe/photo/' + item.id + '" height="42" width="42">' + label;
+    }
+
+    $('#id_autocomplete').djselectable('option', 'formatLabel', formatLabel);
+  });
+  </script>
+
+  <!--   For the use of popover panel -->
+  <script type="text/javascript">
+  $(function () {
+    $('[data-toggle="popover"]').popover()
+  })
+  </script>
+
+  <!--   For selection -->
+  <script type="text/javascript">
+  $('.selectpicker').selectpicker();
+  </script>
+
+  <div nav>
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+
+      <div class="container navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class ="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{% url 'home' %}">RecipeHub</a>
+      </div>
+      <div class="navbar-right">
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-left">
+
+            <li> 
+              <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingTwo" >
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Search Recipe
+                  </a>
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                  <div class="panel-body">
+
+                    <form class="form-horizontal" role="form" method="get" action="{% url 'search' %}">
+                      <div class="form-group">
+                        <div class="col-sm-10">
+                          <tr><td>
+                            <input data-selectable-allow-new="false" data-selectable-type="text" data-selectable-url="/selectable/foodchaser-recipelookup/" id="id_autocomplete" name="autocomplete" type="text" placeholder="Type a recipe's name" /></td></tr>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-sm-10">
+                            <tr><th><label for="id_category_1">Select one category:</label></th><td>
+                              <select id="id_category_1" name="category_1" class="selectpicker show-tick">
+                                <option value="" selected="selected"></option>
+                                <option value="Appetizers">Appetizers</option>
+                                <option value="Main Dish">Main Dish</option>
+                                <option value="Side Dish">Side Dish</option>
+                                <option value="Soup">Soup</option>
+                              </select></td></tr>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <div class="col-sm-10">
+                              <tr><th><label for="id_category_2">Select an another category:</label></th><td>
+                                <select id="id_category_2" name="category_2" class="selectpicker show-tick">
+                                  <option value="" selected="selected"></option>
+                                  <option value="Poultry">Poultry</option>
+                                  <option value="Pork">Pork</option>
+                                  <option value="Beef">Beef</option>
+                                  <option value="Seafood">Seafood</option>
+                                  <option value="Vegetables">Vegetables</option>
+                                </select></td></tr>
+                              </div>
+                            </div>
+
+                            <div class="form-group">
+                              <div class="col-sm-10">
+                                <tr><th><label for="id_ingredient">Type the keyword of ingredient you want to search:</label></th><td><input data-selectable-allow-new="false" data-selectable-type="text" data-selectable-url="/selectable/foodchaser-ingredientlookup/" id="id_ingredient" name="ingredient" type="text" /></td></tr>
+                              </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-default">
+                              <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+
+                  </li>
+
+                  <li><a href="{% url 'recommend' %}" class="fa fa-spoon fa-lg" data-toggle="tooltip" data-placement="bottom" title="Recommend"></a></li>
+
+                  <li><a href="{% url 'recipebox_maindish' %}" class="fa fa-book fa-lg" data-toggle="tooltip" data-placement="bottom" title="Recipe Box"></a></li>
+
+                  <li><a href="{% url 'home' %}" class="fa fa-book fa-lg" data-toggle="tooltip" data-placement="bottom" title="Recipe Box"></a></li>
+
+                  <li><a href="{% url 'get_planner' %}" class="fa fa-calendar-o fa-lg" data-toggle="tooltip" data-placement="bottom" title="Menu Planner"></a></li>
+
+                  <li><a href="{% url 'add_recipe' %}" class="fa fa-plus-square-o fa-lg" data-toggle="tooltip" data-placement="bottom" title="Add a Recipe"></a></li>
+
+                  <script type="text/javascript">
+                  $('a').tooltip();
+                  </script> 
+                  <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">More<b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li class="dropdown-header">Settings</li>
+                    <li><a href="{% url 'settings' %}">Preference Settings</a></li>
+                    <li class="divider"></li>
+
+                    <li class="dropdown-header">Virtual Restaurant</li>
+                    <li><a href="{% url 'virtual_restaurant' %}">View</a></li>
+                    <li><a href="{% url 'edit_virtual_menu' %}">Customize</a></li>
+                    <li class="divider"></li>
+
+                    <li class="dropdown-header">Actions</li>
+                    <li><a href="{% url 'change_password' %}">Change password</a></li>
+                    <li><a href="{% url 'logout' %}">Log Out</a></li>
+                  </ul>
+                </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <body onload="makeCheck()">
+
+          <!-- Tab panes -->
+          <div class="container">
+            <div class="col-lg-4 centered">
+              <ul id="myTab" class="nav nav-tabs">
+                <li class="active"><a href="#profile" data-toggle="tab">Profile</a></li>
+                <li><a href="#taste_preference " data-toggle="tab">Taste Preference</a></li>
+                <!-- <li><a href="#settings" data-toggle="tab">Settings</a></li> -->
+              </ul>
+              <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade in active" id="profile">
+                  <br>
+                  <div class="panel panel-default">
+                    <div class="panel-heading">Profile</div>
+                    <div class="panel-body">
+
+                      <form enctype="multipart/form-data" id="profileform" action="/foodchaser/changemyprofile" method="post">
+                        <div class="form-group">
+                          <label for="first_name">First Name</label>
+                          <input id="id_firstname" maxlength="20" name="firstname" type="text" class="form-control" placeholder="first name" value="{{profileform.firstname.value}}"/>
+                          <br>
+                          <label for="last_name">Last Name</label>
+                          <input id="id_lastname" maxlength="20" name="lastname" type="text" class="form-control" placeholder="last name" value="{{profileform.lastname.value}}">
+                          <br>
+                          <label>Gender</label>
+                          <select name="gender" form="profileform" id="id_gender" name="gender" value="{{profileform.gender.value}}">
+                            <option value=""></option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                          </select>
+                          Current: {{profileform.gender.value}}
+
+                          <br>
+
+                          <label for="id_location">Location:</label>
+                          <input type="text" class="form-control" placeholder="Location" id="id_location" maxlength="100" name="location" value="{{profileform.location.value}}">
+                          <br>
+                          <label for="id_photo">Photo:</label>
+                          <input class="form-control" id="id_photo" name="photo" type="file" onchange="readURL(this);" >
+                          <br>
+                          <!-- <div class="row"> -->
+                            <!-- <div class="col-md-6">   -->
+                              <dl>
+                                <dt>Current profile picture</dt>
+                                <dd>                    
+                                  {% if profileform.photo %}
+                                  <img src="profilephoto" alt="" width="200px">
+                                  {% endif %}
+                                </dd>
+                                </dl>    
+                                <br>
+
+                                <dl>
+                                  <dt>Preview uploaded picture</dt>
+                                  <dd>                    
+                                    <img id="todisplay" alt="your image"/>
+                                    <script>
+                                    function readURL(input) {
+                                      if (input.files && input.files[0]) {
+                                        var reader = new FileReader();
+
+                                        reader.onload = function (e) {
+                                          $('#todisplay')
+                                          .attr('src', e.target.result)
+                                          .width(150)
+                                          .height(200);
+                                        };
+
+                                        reader.readAsDataURL(input.files[0]);
+                                      }
+                                    }
+                                    </script>
+                                  </dd>
+                                  <dd>                    
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                                      Crop your profile picture
+                                    </button>
+                                  </dd>
+                                </dl>
+
+                            <!-- Button trigger modal -->
+<!--                   <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+                    Crop your profile picture
+                  </button> -->
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                          <h4 class="modal-title" id="myModalLabel">Crop the uploaded picture</h4>
+                        </div>
+                        <div class="modal-body">
+
+                          <!-- The modal window for cropping picture -->
+
+                          <script src="{{ STATIC_URL }}js/cropbox.js"></script>
+                          <div class="container">
+                            <div class="imageBox">
+                              <div class="thumbBox"></div>
+                              <div class="spinner" style="display: none">Loading...</div>
+                            </div>
+                            <div class="action">
+                              <!--                               <input type="file" id="file" style="float:left; width: 250px"> -->
+                              <!-- <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="left" title="Just ">Crop</button> -->
+                              <input type="button" id="btnCrop" value="Crop" style="float: right">
+                              <input type="button" id="btnZoomIn" value="+" style="float: right">
+                              <input type="button" id="btnZoomOut" value="-" style="float: right">
+                            </div>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="cropped">
+
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                You will need to save the cropped picture manually. Just right-click the picture and choose "save picture as...".
+                              </div>
+                            </div>
+                          </div>
+                          <script type="text/javascript">
+                          window.onload = function() {
+                            var options =
+                            {
+                              imageBox: '.imageBox',
+                              thumbBox: '.thumbBox',
+                              spinner: '.spinner',
+                            }
+                            var cropper;
+                            document.querySelector('#id_photo').addEventListener('change', function(){
+                              var reader = new FileReader();
+                              reader.onload = function(e) {
+                                options.imgSrc = e.target.result;
+                                cropper = new cropbox(options);
+                              }
+                              reader.readAsDataURL(this.files[0]);
+                              this.files = [];
+                            })
+                            document.querySelector('#btnCrop').addEventListener('click', function(){
+                              var img = cropper.getDataURL()
+                              document.querySelector('.cropped').innerHTML = '<img src="'+img+'">';
+                            })
+                            document.querySelector('#btnZoomIn').addEventListener('click', function(){
+                              cropper.zoomIn();
+                            })
+                            document.querySelector('#btnZoomOut').addEventListener('click', function(){
+                              cropper.zoomOut();
+                            })
+                          };
+                          </script>
+
+                        </div>
+
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                  <label for="description">Description</label>
+                  <textarea class="form-control" name="description" placeholder="Tell people about yourself..." id="id_description"></textarea>
+                  My description:
+                  {{profileform.description.value}}
+                  <br>
+                  <label for="id_age">Age:</label>
+                  <input id="id_age" min="0" name="age" type="number" class="form-control" placeholder="age" value="{{profileform.age.value}}">
+                  <br>
+                  <button type="submit" class="btn btn-primary" form="profileform">Save</button>
+                  {% csrf_token %}
+                </div>
+              </form>
+            </div>
+
+          </div>
+
+        </div>
+        <div class="tab-pane fade" id="taste_preference">
+          <br>
+          <div class="panel panel-default">
+            <div class="panel-heading">Taste Preference</div>
+            <div class="panel-body">
+              <br>
+              <form role="form" action="{% url 'dislike' %}" method="post">
+                <label>Disliked Ingredients</label>
+                <ul>
+                  {% for ingredient in dislikes %}
+                  <li> {{ ingredient.name }}
+                    {% endfor %}
+                  </ul>
+                  <div id="prefetch">
+                    <input type="text" class="form-control typeahead" placeholder="search an ingredient" name="ingredient">
+                  </div>
+                  <br>
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+                <br>
+                <form role="form" action="{% url 'preference' %}" method="post">
+                  <label>Vegetarian and Allergies</label>
+                  {% for field in allergyForm.visible_fields %}
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="{{field.name}}" value="{{field.value}}" onclick="checkState(this)"> {{field.label}}
+                    </label>
+                  </div>
+                  {% endfor %}
+                  <br>
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+              </div>
+
+            </div>
+          </div>
+<!--           <div class="tab-pane fade" id="settings">
+            <br>
+            <div class="panel panel-default">
+              <div class="panel-heading">Settings</div>
+              <div class="panel-body">
+                <form role="form">
+                  <div class="form-group">
+                    <button class="btn btn-default">Change Password</button>
+                    <br>
+                    <br>
+                    <label for="change_email">Change Email</label>
+                    <input type="email" class="form-control" id="change_email" placeholder="current email">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+              </div>
+
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+  var ingredients = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    limit: 10,
+    prefetch: {
+    // url points to a json file that contains an array of country names, see
+    // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
+    url: '{{ STATIC_URL }}ingredients.json',
+    // the json file contains an array of strings, but the Bloodhound
+    // suggestion engine expects JavaScript objects so this converts all of
+    // those strings
+    filter: function(list) {
+      return $.map(list, function(ingredients) { return { name: ingredients }; });
+    }
+  }
+});
+
+// kicks off the loading/processing of `local` and `prefetch`
+ingredients.initialize();
+
+// passing in `null` for the `options` arguments will result in the default
+// options being used
+$('#prefetch .typeahead').typeahead(null, {
+  name: 'ingredients',
+  displayKey: 'name',
+  // `ttAdapter` wraps the suggestion engine in an adapter that
+  // is compatible with the typeahead jQuery plugin
+  source: ingredients.ttAdapter()
+});
+
+</script>
+
+
+<!-- <div class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+          <div class="container">
+              <div class="navbar-text pull-left">
+                  <p>This is a footer for future use</p>
+              </div>
+          </div>
+        </div> -->
+
+        </html>

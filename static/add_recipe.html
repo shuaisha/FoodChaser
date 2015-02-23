@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Recipe Box</title>
+
+
+    <!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="js/star-rating.min.js" type="text/javascript"></script>
+	<link href="font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="css/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />
+	<link href="css/customCSS.css" rel="stylesheet">
+
+  </head>
+  <div nav>
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+          
+	      <div class="container navbar-header">
+	          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	              <span class ="sr-only">Toggle navigation</span>
+	              <span class="icon-bar"></span>
+	              <span class="icon-bar"></span>
+	              <span class="icon-bar"></span>
+	          </button>
+	          <a class="navbar-brand" href="home.html">RecipeBox</a>
+	      </div>
+             <div class="navbar-right">
+              <div class="navbar-collapse collapse">
+                  <ul class="nav navbar-nav navbar-left">
+
+                      <li><a href="../static/recommend.html" class="fa fa-spoon fa-lg" data-toggle="tooltip" data-placement="bottom" title="Recommand"></a></li>
+
+                      <li><a href="../static/recipebox.html"class="fa fa-book fa-lg" data-toggle="tooltip" data-placement="bottom" title="Recipe Box"></a></li>
+
+                      <li><a href="../static/menu_planner.html" class="fa fa-calendar-o fa-lg" data-toggle="tooltip" data-placement="bottom" title="Menu Planner"></a></li>
+
+                      <li class="active"><a href="../static/add_recipe.html" class="fa fa-plus-square-o fa-lg" data-toggle="tooltip" data-placement="bottom" title="Add a Recipe"></a></li>
+                      
+                      <script type="text/javascript">
+                      $('a').tooltip();
+                      </script> 
+                      <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">More<b class="caret"></b></a>
+                          <ul class="dropdown-menu">
+                              <li class="dropdown-header">Settings</li>
+                              <li><a href="#">Privacy Settings</a></li>
+                              <li><a href="#">Custom Settings</a></li>
+                              <li class="divider"></li>
+                              
+                              <li class="dropdown-header">Help</li>
+                              <li><a href="#">User Guide</a></li>
+                              <li><a href="#">Contact Us</a></li>
+                              <li class="divider"></li>
+                              
+                              <li class="dropdown-header">Actions</li>
+                              <li><a href="#">Switch User</a></li>
+                              <li><a href="index.html">Log Out</a></li>
+                          </ul>
+                      </li>
+                  </ul>
+                  
+                      <form class="navbar-form navbar-right" role="search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                        <button type="submit" class="btn btn-default">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                      </form>
+
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- Nav bar ends-->
+<body>
+	
+	<div class="media" id="profile_block">
+	  <a class="media-left media-middle" href="#">
+	    <img src="../static/img/default_user.png" alt="..." height="150px" width="150px">
+
+	  </a>
+	  <div class="media-body">
+	    <h1 class-"media-heading">Xing Chen</h1>
+	    <p>Rank : Beginner</p>
+	  </div>
+	</div>
+
+	<ul class="nav nav-tabs nav-justified" role="tablist">
+		<li role="presentation"><a href="#">Recommandations</a></li>
+		<li role="presentation" class="active"><a href="#">Recipe Box</a></li>
+	  	<li role="presentation"><a href="#">Menu Planner</a></li>
+	</ul>
+
+	<!-- the second nav bar ends, put content below-->
+<div class="container">
+	<br>
+	<br>
+	<!-- Add by URL form start-->
+	<div class="panel panel-default">
+		<div class="panel-heading">Add recipe by URL
+		</div>
+		<div class="panel-body">
+			<form class="form-inline" role="form">
+				<div class="form-group">
+					<input type="url" class="form-control" id="import" placeholder="Add by URL">
+						
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">And</div>
+							<input class="form-control" type="text" placeholder="Name the recipe">
+						</div>
+					</div>
+				</div>
+				<button type="submit" class="btn btn-default">Add to my RecipeBox</button>
+			</form>
+		</div>
+	</div>
+	<!-- Add by URL form end-->
+	<br>
+	<br>
+	<br>
+	<!-- Add recipe form start-->
+	<div class="panel panel-default">
+		<div class="panel-heading">Create a recipe
+		</div>
+		<div class="panel-body">
+			<form role="form">
+				<div class="form-group">
+				<label for="title">Title</label>
+				<input type="text" class="form-control" id="title" placeholder="Title">
+				</div>
+				<br>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" value="">
+						Keep this recipe private
+					</label>
+				</div>
+				<br>
+				<div class="form-group">
+				<label for="image">Upload Image</label>
+				<input type="file" id="image">
+				</div>
+				<br>
+				<div class="form-group">
+				<label for="description">Description</label>
+				<input type="textarea" class="form-control" id="description" placeholder="Description">
+				</div>
+				<br>
+				<div class="form-group">
+				<label for="category">Category</label>
+				<div class="form-inline">
+					<select class="form=control" id="category">
+						<option>--Any category--</option>
+						<option>Appetizers</option>
+						<option>Main Dish</option>
+						<option>Side Dish</option>
+						<option>Soup</option>
+					</select>
+
+					<select class="form=control" id="category">
+						<option>--Pick one--</option>
+						<option>Poultry</option>
+						<option>Pork</option>
+						<option>Beef</option>
+						<option>Seafood</option>
+						<option>Vegetables</option>
+					</select>
+				</div>
+				</div>
+				<br>
+				<div class="form-group">
+					<label for="input-1">How spicy?</label>
+					<input id="input-1" class="rating" data-min="0" data-max="5" data-size="xs" data-step="1">
+				</div>
+				<br>
+
+				<div class="form-group">
+				<label for="ingradients">Ingradients</label>
+					<table class="table table-hover table-bordered">
+						<tr>
+							<th>Item</th>
+							<th>Quantity</th>
+							<th>Measure</th>
+							<th>Notes</th>
+						</tr>
+					 	<tr>
+					 		<td><input type="text" class="form-control"></td>
+					 		<td><input type="number" class="form-control"></td>
+					 		<td><input type="text" class="form-control"></td>
+					 		<td><input type="text" class="form-control"></td>
+					 	</tr>
+					 	<tr>
+					 		<td><input type="text" class="form-control"></td>
+					 		<td><input type="number" class="form-control"></td>
+					 		<td><input type="text" class="form-control"></td>
+					 		<td><input type="text" class="form-control"></td>
+					 	</tr>
+
+					</table>
+					<a>Add another item</a>
+				</div>
+				<br>
+
+				<div class="form-group">
+				<label for="instruction">Instructions</label>
+				<table class="table table-hover table-bordered">
+						<tr>
+							<th>Step</th>
+							<th>Prep Time (min)</th>
+							<th>Cook Time (min)</th>
+							<th>Picture</th>
+						</tr>
+					 	<tr>
+					 		<td><input type="text" class="form-control"></td>
+					 		<td><input type="number" class="form-control" placeholder="0"></td>
+					 		<td><input type="number" class="form-control" placeholder="0"></td>
+					 		<td><input type="file" class="btn btn-success">
+			                </td>
+					 	</tr>
+					 	<tr>
+					 		<td><input type="text" class="form-control"></td>
+					 		<td><input type="number" class="form-control" placeholder="0"></td>
+					 		<td><input type="number" class="form-control" placeholder="0"></td>
+					 		<td><input type="file" class="btn btn-success">
+			                </td>
+					 	</tr>
+
+
+					</table>
+				<a>Add another step</a>
+				<br>
+				<br>
+				<label for="total_time">Estimated total time
+				<input type="number" id="total_time" class="form-control">
+				
+				</div>
+				<button class="btn btn-success pull-left">Preview</button>
+				<button type="submit" class="btn btn-primary pull-right">Submit</button>
+				<button class="btn btn-default pull-right">Save draft</button>
+			</form>
+			<!-- Add recipe form end -->
+		</div>
+	</div>
+
+	<style>
+	.panel-body {
+		background:#F1F1F1;
+	}
+	</style>
+
+</div>
+<!-- container end-->
+</body>
+<br>
+<br>
+<br>
+<br>
+<div class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+          <div class="container">
+              <div class="navbar-text pull-left">
+                  <p>This is a footer for future use</p>
+              </div>
+          </div>
+      </div>
+    
+</html>

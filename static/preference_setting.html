@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Taste Preference</title>
+
+
+      <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="css/bootstrap.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <link href="font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="css/customCSS.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css/demo.css" />
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script type="text/javascript" src="js/modernizr.custom.04022.js"></script>
+
+</head>
+  <div nav>
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+          
+	      <div class="container navbar-header">
+	          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	              <span class ="sr-only">Toggle navigation</span>
+	              <span class="icon-bar"></span>
+	              <span class="icon-bar"></span>
+	              <span class="icon-bar"></span>
+	          </button>
+	          <a class="navbar-brand" href="home.html">RecipeBox</a>
+	      </div>
+             <div class="navbar-right">
+              <div class="navbar-collapse collapse">
+                  <ul class="nav navbar-nav navbar-left">
+
+                      <li><a href="../static/recommend.html" class="fa fa-spoon fa-lg" data-toggle="tooltip" data-placement="bottom" title="Recommand"></a></li>
+
+                      <li><a href="../static/recipebox.html"class="fa fa-book fa-lg" data-toggle="tooltip" data-placement="bottom" title="Recipe Box"></a></li>
+
+                      <li><a href="../static/menu_planner.html" class="fa fa-calendar-o fa-lg" data-toggle="tooltip" data-placement="bottom" title="Menu Planner"></a></li>
+
+                      <li><a href="../static/add_recipe.html" class="fa fa-plus-square-o fa-lg" data-toggle="tooltip" data-placement="bottom" title="Add a Recipe"></a></li>
+                      
+                      <script type="text/javascript">
+                      $('a').tooltip();
+                      </script> 
+                      <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">More<b class="caret"></b></a>
+                          <ul class="dropdown-menu">
+                              <li class="dropdown-header">Settings</li>
+                              <li><a href="#">Privacy Settings</a></li>
+                              <li><a href="#">Custom Settings</a></li>
+                              <li class="divider"></li>
+                              
+                              <li class="dropdown-header">Help</li>
+                              <li><a href="#">User Guide</a></li>
+                              <li><a href="#">Contact Us</a></li>
+                              <li class="divider"></li>
+                              
+                              <li class="dropdown-header">Actions</li>
+                              <li><a href="#">Switch User</a></li>
+                              <li><a href="index.html">Log Out</a></li>
+                          </ul>
+                      </li>
+                  </ul>
+                  
+                      <form class="navbar-form navbar-right" role="search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                        <button type="submit" class="btn btn-default">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                      </form>
+
+              </div>
+          </div>
+      </div>
+  </div>
+  <body>
+    <!--
+  	<div class="container">
+  		<ul class="nav nav-tabs nav-justified" role="tablist">
+		  <li role="presentation"><a href="#">Profile</a></li>
+		  <li role="presentation" class="active"><a href="#">Taste Preference</a></li>
+		  <li role="presentation"><a href="#">Notifications</a></li>
+		</ul>
+		<br>
+		<form role="form">
+			<br>
+			<label>Disliked Ingredients</label>
+			<div>
+			    <input type="text" class="form-control" placeholder="search an ingredient">
+  			</div>
+  			<br>
+			<label>Diets</label>
+			<div class="checkbox">
+			    <label>
+			      <input type="checkbox"> Lacto vegetarian
+			    </label>
+  			</div>
+  			<div class="checkbox">
+			    <label>
+			      <input type="checkbox"> Pescetarian
+			    </label>
+  			</div>
+  			<div class="checkbox">
+			    <label>
+			      <input type="checkbox"> Vagan
+			    </label>
+  			</div>
+  			<div class="checkbox">
+			    <label>
+			      <input type="checkbox"> Vegetarian
+			    </label>
+  			</div>
+  			<br>
+  			<label>Allergies</label>
+			<div class="checkbox">
+			    <label>
+			      <input type="checkbox"> Diary-Free
+			    </label>
+  			</div>
+  			<div class="checkbox">
+			    <label>
+			      <input type="checkbox"> Egg-Free
+			    </label>
+  			</div>
+  			<div class="checkbox">
+			    <label>
+			      <input type="checkbox"> Peanut-Free
+			    </label>
+  			</div>
+  			<div class="checkbox">
+			    <label>
+			      <input type="checkbox"> Seafood-Free
+			    </label>
+  			</div>
+  			<div class="checkbox">
+			    <label>
+			      <input type="checkbox"> Sesame-Free
+			    </label>
+  			</div>
+  			<div class="checkbox">
+			    <label>
+			      <input type="checkbox"> Soy-Free
+			    </label>
+  			</div>
+  			<div class="checkbox">
+			    <label>
+			      <input type="checkbox"> Sulfite-Free
+			    </label>
+  			</div>
+  			<div class="checkbox">
+			    <label>
+			      <input type="checkbox"> Tree Nut-Free
+			    </label>
+  			</div>
+  			<div class="checkbox">
+			    <label>
+			      <input type="checkbox"> Wheat-Free
+			    </label>
+  			</div>
+  			<br>
+		</form>
+  	</div>
+  -->
+
+
+<!-- Tab panes -->
+<div class="container">
+  <div class="col-lg-4 centered">
+    <ul id="myTab" class="nav nav-tabs">
+      <li class="active"><a href="#profile" data-toggle="tab">Profile</a></li>
+      <li><a href="#taste_preference " data-toggle="tab">Taste Preference</a></li>
+      <li><a href="#settings" data-toggle="tab">Settings</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+      <div class="tab-pane fade in active" id="profile">
+        <br>
+        <div class="panel panel-default">
+          <div class="panel-heading">Profile</div>
+          <div class="panel-body">
+            <form role="form">
+              <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input type="text" class="form-control" id="first_name" placeholder="first name">
+                <br>
+                <label for="last_name">Last Name</label>
+                <input type="text" class="form-control" id="first_name" placeholder="last name">
+                <br>
+                <label>Gender</label>
+                <label class="radio-inline">
+                  <input type="radio" value="male"> Male
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" value="female"> Female
+                </label>
+                <br>
+                <br>
+                <label for="city">City</label>
+                <input type="text" class="form-control" id="city" placeholder="City">
+                <br>
+                <label for="state">State/Province/Region</label>
+                <input type="text" class="form-control" id="state" placeholder="State">
+                <br>
+                <label for="country">Country</label>
+                <input type="text" class="form-control" id="country" placeholder="Country">
+                <br>
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" placeholder="Tell people about yourself..."></textarea>
+                <br>
+                <button type="submit" class="btn btn-primary">Save</button>
+              </div>
+            </form>
+          </div>
+          
+        </div>
+        
+      </div>
+      <div class="tab-pane fade" id="taste_preference">
+      <br>
+        <div class="panel panel-default">
+          <div class="panel-heading">Taste Preference</div>
+          <div class="panel-body">
+            <form role="form">
+              <br>
+              <label>Disliked Ingredients</label>
+              <div>
+                  <input type="text" class="form-control" placeholder="search an ingredient">
+                </div>
+                <br>
+              <label>Diets</label>
+              <div class="checkbox">
+                  <label>
+                    <input type="checkbox"> Lacto vegetarian
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox"> Pescetarian
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox"> Vagan
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox"> Vegetarian
+                  </label>
+                </div>
+                <br>
+                <label>Allergies</label>
+              <div class="checkbox">
+                  <label>
+                    <input type="checkbox"> Diary-Free
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox"> Egg-Free
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox"> Peanut-Free
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox"> Seafood-Free
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox"> Sesame-Free
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox"> Soy-Free
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox"> Sulfite-Free
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox"> Tree Nut-Free
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox"> Wheat-Free
+                  </label>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+          </div>
+          
+        </div>
+      </div>
+      <div class="tab-pane fade" id="settings">
+      <br>
+        <div class="panel panel-default">
+          <div class="panel-heading">Settings</div>
+          <div class="panel-body">
+            <form role="form">
+              <div class="form-group">
+                <button class="btn btn-default">Change Password</button>
+                <br>
+                <br>
+                <label for="change_email">Change Email</label>
+                <input type="email" class="form-control" id="change_email" placeholder="current email">
+              </div>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  </body>
+
+
+
+<div class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+          <div class="container">
+              <div class="navbar-text pull-left">
+                  <p>This is a footer for future use</p>
+              </div>
+          </div>
+      </div>
+    
+</html>

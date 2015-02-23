@@ -1,0 +1,320 @@
+{% load selectable_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Edit virtual restaurant menu</title>
+
+
+    <!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+	<!-- Those are for the use of autocomplete form -->
+	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/themes/base/jquery-ui.css" type="text/css">
+	<link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/dj.selectable.css" />
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="{{ STATIC_URL }}js/jquery-ui-1.11.2.custom/jquery-ui.min.js"></script>
+	<link href="{{ STATIC_URL }}font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="{{ STATIC_URL }}css/customCSS.css" rel="stylesheet">
+
+  </head>
+
+ <!-- A script for autocomplete tabs -->
+
+   
+  <div nav>
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+          
+	      <div class="container navbar-header">
+	          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	              <span class ="sr-only">Toggle navigation</span>
+	              <span class="icon-bar"></span>
+	              <span class="icon-bar"></span>
+	              <span class="icon-bar"></span>
+	          </button>
+	          <a class="navbar-brand" href="{% url 'home' %}">RecipeHub</a>
+	      </div>
+             <div class="navbar-right">
+              <div class="navbar-collapse collapse">
+                  <ul class="nav navbar-nav navbar-left">
+
+                      <li><a href="{% url 'recommend' %}" class="fa fa-spoon fa-lg" data-toggle="tooltip" data-placement="bottom" title="Recommend"></a></li>
+
+                      <li class="active"><a href="{% url 'home' %}" class="fa fa-book fa-lg" data-toggle="tooltip" data-placement="bottom" title="Recipe Box"></a></li>
+
+                      <li><a href="{% url 'get_planner' %}" class="fa fa-calendar-o fa-lg" data-toggle="tooltip" data-placement="bottom" title="Menu Planner"></a></li>
+
+                      <li><a href="{% url 'add_recipe' %}" class="fa fa-plus-square-o fa-lg" data-toggle="tooltip" data-placement="bottom" title="Add a Recipe"></a></li>
+                      
+                      <script type="text/javascript">
+                      $('a').tooltip();
+                      </script> 
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">More<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                          <li class="dropdown-header">Settings</li>
+                          <li><a href="{% url 'settings' %}">Preference Settings</a></li>
+                          <li class="divider"></li>
+
+                          <li class="dropdown-header">Virtual Restaurant</li>
+                          <li><a href="{% url 'virtual_restaurant' %}">View</a></li>
+                          <li><a href="{% url 'edit_virtual_menu' %}">Customize</a></li>
+                          <li class="divider"></li>
+
+                          <li class="dropdown-header">Actions</li>
+                          <li><a href="{% url 'change_password' %}">Change password</a></li>
+                          <li><a href="{% url 'logout' %}">Log Out</a></li>
+                        </ul>
+                      </li>
+                  </ul>
+
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- Nav bar ends-->
+<body>
+
+	<div class="media" id="profile_block">
+          <a class="media-left media-middle" href="#">
+            {% if profile.photo %}
+            <img src="profilephoto" alt="" width="150px" height="150px">
+            {% endif %}
+          </a>
+          <div class="media-body">
+            <h4 class-"media-heading">{{user}}</h4>
+            <h4>
+                  <button type="button" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="bottom" title="My current level" data-html="true" data-content='<div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{level.activityScore}}%;">
+                      {{level.activityScore}}%
+                    </div>
+                  </div>Current level: {{level.cur_title}}<div>
+                </div>Rating score: {{actual_score}}<span class="rating-static rating-{{avg_rating}}"></span><div>
+                    '>
+                    Check my level
+                  </button>
+            </h4>
+          </div>
+        </div>
+
+	<!-- the second nav bar ends, put content below-->
+<div class="container">
+  <br>
+  <div class="panel panel-default">
+    <div class="panel-heading">Customize restaurant</div>
+    <div class="panel-body">
+      {{msg}}
+      {% if virtual_restaurant_form %}
+      <form role="form" action="{% url 'edit_virtual_menu' %}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for='id_name'>Name</label>
+          {{ virtual_restaurant_form.name }}
+        </div>
+        <div class="form-group">
+          <label for='id_background_pic'>Background picture</label>
+          {{ virtual_restaurant_form.background_pic }}
+        </div>
+        <div class="form-group">
+          <label for='id_self_description'>Self_description</label>
+          {{ virtual_restaurant_form.self_description }}
+        </div>
+        <div class="form-group">
+          <label for='id_restaurant_description'>Restaurant_description</label>
+          {{ virtual_restaurant_form.restaurant_description }}
+        </div>
+        {% csrf_token %}
+        <button type='submit' class='btn btn-success'>Submit</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">Customize menu</div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="sideBySide">
+          <div class="left col-xs-3 col-md-3">
+            <br>
+            <br>
+            <br>
+          <div class="btn-group" role="group" aria-label="...">
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                My collection
+                <span class="caret"></span>
+              </button>
+              <ul class="source connected dropdown-menu" role="menu">
+              {% for recipe in recipes %}
+              <li><a id="{{recipe.id}}">{{recipe.recipe_name}}</a></li>
+              {% endfor %}
+              </ul>
+            </div>
+            <button type="button" class="btn btn-success" onclick="saveMenu()">Save</button>
+          </div>
+          </div>
+
+          <div class="right col-xs-2 col-md-2">
+            <h3>Appetizer</h3>
+            <ul class="target connected" id="appetizer">
+              {% for recipe in appetizer %}
+              <li><a id="{{recipe.id}}">{{recipe.recipe_name}}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="right col-xs-2 col-md-2">
+            <h3>Soup</h3>
+            <ul class="target connected" id="soup">
+              {% for recipe in soup %}
+              <li><a id="{{recipe.id}}">{{recipe.recipe_name}}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="right col-xs-2 col-md-2">
+            <h3>Main Course</h3>
+            <ul class="target connected" id="main_course">
+              {% for recipe in main_course %}
+              <li><a id="{{recipe.id}}">{{recipe.recipe_name}}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="right col-xs-2 col-md-2">
+            <h3>Dessert</h3>
+            <ul class="target connected" id="dessert">
+              {% for recipe in dessert %}
+              <li><a id="{{recipe.id}}">{{recipe.recipe_name}}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+
+        </div>
+
+    </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <br>
+</div>
+
+  
+
+<script type="text/javascript">
+  $(function () {
+    $(".source, .target").sortable({
+      connectWith: ".connected"
+    });
+  });
+</script>
+<style>
+ul.source, ul.target {
+  min-height: 50px;
+  margin: 0px 25px 10px 0px;
+  padding: 2px;
+  border-width: 1px;
+  border-style: solid;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  list-style-type: none;
+  list-style-position: inside;
+}
+ul.source {
+  border-color: #f8e0b1;
+}
+ul.target {
+  border-color: #add38d;
+}
+.source li, .target li {
+  margin: 5px;
+  padding: 5px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.source li {
+  background-color: #fcf8e3;
+  border: 1px solid #fbeed5;
+  color: #c09853;
+}
+.target li {
+  background-color: #ebf5e6;
+  border: 1px solid #d6e9c6;
+  color: #468847;
+}
+.sortable-dragging {
+  border-color: #ccc !important;
+  background-color: #fafafa !important;
+  color: #bbb !important;
+}
+.sortable-placeholder {
+  height: 40px;
+}
+.source .sortable-placeholder {
+  border: 2px dashed #f8e0b1 !important;
+  background-color: #fefcf5 !important;
+}
+.target .sortable-placeholder {
+  border: 2px dashed #add38d !important;
+  background-color: #f6fbf4 !important;
+}
+</style>
+<script>
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+function saveMenu(){
+  var req;
+  var items = [];
+  $(".target").each(function(){
+    var category = $(this).attr("id");
+    console.log(category);
+    var dishes = $(this).children();
+    dishes.each(function(){
+      var dish = $(this).children().attr("id");
+      console.log(dish);
+      item = {key: category, value: dish};
+      items.push(item);
+    });
+  });
+  var jsonData = JSON.stringify(items);
+  console.log(jsonData);
+  $.ajaxSetup({ 
+     beforeSend: function(handleResponse, settings) {
+         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+             handleResponse.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          }  
+        } 
+    });
+      req = $.ajax({
+        url: "/foodchaser/save_virtual_restaurant_menu",
+        type: "POST",
+        data: jsonData,
+        success: function(){console.log("sent")},
+        error: function(){console.log("failed to save")}
+      });
+}
+</script>
+</body>
+</html>

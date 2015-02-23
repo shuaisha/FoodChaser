@@ -1,0 +1,286 @@
+{% load selectable_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>Recommendations</title>
+
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+  <!-- Those are for the use of autocomplete form -->
+  <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/themes/base/jquery-ui.css" type="text/css">
+  <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/dj.selectable.css" />
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+  <script src="{{ STATIC_URL }}js/jquery.dj.selectable.js"></script>
+
+  <!-- Latest compiled and minified JavaScript -->
+  <link href="{{STATIC_URL}}font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="{{STATIC_URL}}css/customCSS.css" rel="stylesheet">
+
+  <!-- For dropdown menu -->
+  <script src="{{ STATIC_URL }}js/bootstrap-select.js"></script>
+  <link href="{{ STATIC_URL }}css/bootstrap-select.css" rel="stylesheet">
+
+</head>
+
+
+<!-- A script for autocomplete tabs -->
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $(':input[name=my_field_0]').bind('djselectableselect', function(event, ui) {
+    $(this).parents("form").submit();
+  }
+  );
+  function newParameters(query) {
+    query.category_1 = $('#id_category_1').val();
+    query.category_2 = $('#id_category_2').val();
+    query.ingredient = $('#id_ingredient').val();
+  }
+  $('#id_autocomplete').djselectable('option', 'prepareQuery', newParameters);
+  function formatLabel(label, item) {
+    var data = label;
+    return '<img src="/foodchaser/recipe/photo/' + item.id + '" height="42" width="42">' + label;
+  }
+  $('#id_autocomplete').djselectable('option', 'formatLabel', formatLabel);
+});
+</script>
+
+<!--   For the use of popover panel -->
+<script type="text/javascript">
+$(function () {
+  $('[data-toggle="popover"]').popover()
+})
+</script>
+
+<!--   For selection -->
+<script type="text/javascript">
+$('.selectpicker').selectpicker();
+</script>
+
+<div nav>
+  <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    
+    <div class="container navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class ="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      {% if logged_in == True %}
+      <a class="navbar-brand" href="/foodchaser/userhome">RecipeHub</a>
+      {% endif %}
+
+      {% if logged_in == False %}
+      <a class="navbar-brand" href="/">RecipeHub</a>
+      {% endif %}
+    </div>
+    <div class="navbar-right">
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-left">
+
+          {% if logged_in == True %}
+          <li> 
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="headingTwo" >
+                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  Search Recipe
+                </a>
+              </div>
+              <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="panel-body">
+
+                  <form class="form-horizontal" role="form" method="get" action="{% url 'search' %}">
+                    <div class="form-group">
+                      <div class="col-sm-10">
+                        <tr><td>
+                          <input data-selectable-allow-new="false" data-selectable-type="text" data-selectable-url="/selectable/foodchaser-recipelookup/" id="id_autocomplete" name="autocomplete" type="text" placeholder="Type a recipe's name" /></td></tr>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <div class="col-sm-10">
+                          <tr><th><label for="id_category_1">Select one category:</label></th><td>
+                            <select id="id_category_1" name="category_1" class="selectpicker show-tick">
+                              <option value="" selected="selected"></option>
+                              <option value="Appetizers">Appetizers</option>
+                              <option value="Main Dish">Main Dish</option>
+                              <option value="Side Dish">Side Dish</option>
+                              <option value="Soup">Soup</option>
+                            </select></td></tr>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-sm-10">
+                            <tr><th><label for="id_category_2">Select an another category:</label></th><td>
+                              <select id="id_category_2" name="category_2" class="selectpicker show-tick">
+                                <option value="" selected="selected"></option>
+                                <option value="Poultry">Poultry</option>
+                                <option value="Pork">Pork</option>
+                                <option value="Beef">Beef</option>
+                                <option value="Seafood">Seafood</option>
+                                <option value="Vegetables">Vegetables</option>
+                              </select></td></tr>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <div class="col-sm-10">
+                              <tr><th><label for="id_ingredient">Type the keyword of ingredient you want to search:</label></th><td><input data-selectable-allow-new="false" data-selectable-type="text" data-selectable-url="/selectable/foodchaser-ingredientlookup/" id="id_ingredient" name="ingredient" type="text" /></td></tr>
+                            </div>
+                          </div>
+
+                          <button type="submit" class="btn btn-default">
+                            <span class="glyphicon glyphicon-search"></span>
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+
+                </li>        
+                {% endif %}
+
+                {% if logged_in == True %}
+                <li class="active"><a href="recommend" class="fa fa-spoon fa-lg" data-toggle="tooltip" data-placement="bottom" title="Recommend"></a></li>
+                {% endif %}
+
+                {% if logged_in == False %}
+                <li><a class="fa fa-spoon fa-lg" data-placement="bottom" title="Recommend" data-toggle="modal" data-target="#myModal"></a></li>
+                {% endif %}
+
+
+                {% if logged_in == True %}
+                <li><a href="userhome" class="fa fa-book fa-lg" data-toggle="tooltip" data-placement="bottom" title="Recipe Box"></a></li>
+                {% endif %}
+
+                {% if logged_in == False %}
+                <li><a class="fa fa-book fa-lg" data-toggle="modal" data-target="#myModal" data-placement="bottom" title="Recipe Box"></a></li>
+                {% endif %}
+
+                {% if logged_in == True %}
+                <li><a href="{% url 'get_planner' %}" class="fa fa-calendar-o fa-lg" data-toggle="tooltip" data-placement="bottom" title="Menu Planner"></a></li>
+                {% endif %}
+
+                {% if logged_in == False %}
+                <li><a class="fa fa-calendar-o fa-lg" data-toggle="modal" data-target="#myModal" data-placement="bottom" title="Menu Planner"></a></li>
+                {% endif %}
+
+                {% if logged_in == True %}            
+                <li><a href="add_recipe" class="fa fa-plus-square-o fa-lg" data-toggle="tooltip" data-placement="bottom" title="Add a Recipe"></a></li>
+                {% endif %}
+
+                {% if logged_in == False %}
+                <li><a class="fa fa-plus-square-o fa-lg" data-placement="bottom" data-toggle="modal" data-target="#myModal" title="Add a Recipe"></a></li>
+                {% endif %}
+
+
+                
+                <script type="text/javascript">
+                $('a').tooltip();
+                </script> 
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">More<b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li class="dropdown-header">Settings</li>
+                    <li><a href="#">Preference Settings</a></li>
+                    <li><a href="#">Privacy Settings</a></li>
+                    <li><a href="#">Custom Settings</a></li>
+                    <li class="divider"></li>
+                    
+                    <li class="dropdown-header">Help</li>
+                    <li><a href="#">User Guide</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li class="divider"></li>
+                    
+                    <li class="dropdown-header">Actions</li>
+                    <li><a href="#">Switch User</a></li>
+                    <li><a href="/foodchaser/logout">Log Out</a></li>
+                    <li><a href="/foodchaser/changepassword">Change my password</a></li>
+                  </ul>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nav bar ends-->
+      <body>
+        
+        {% if logged_in == True %}
+
+<div class="row" id="profile_block">
+  <a class="col-xs-2 col-md-2 col-xs-offset-4 col-md-offset-4" href="#">
+    {% if profile.photo %}
+    <img src="profilephoto" alt="" width="150px" height="150px">
+    {% endif %}
+  </a>
+  <div class="container col-xs-2 col-md-2">
+    <h3>{{user}}</h3>
+
+    <!-- <h4>Rank : Beginner</h4> -->
+    <h4><a href="settings">Change preference</a></h4>
+    <h4><a href="virtual_restaurant">View my restaurant</a></h4>
+    <h4><a href="{% url 'edit_virtual_menu' %}">Customize virtual restaurant</a></h4>
+  </div>
+</div>
+{% endif %}
+
+
+<!-- the nav bar ends, put content below-->
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3>{{title}}</h3></div>
+    <div class="panel-body">
+      <section id="grid" class="grid clearfix">
+        {% for recipe in recipes %}
+        <div class="col-sm-3 col-md-2">
+          <div class="thumbnail">
+            {% if recipe.count %}
+            <img src="/foodchaser/recipe/photo/{{recipe.recipe.id}}" width='200px' height='200px'>
+            <div class="caption">
+              <h3>Top {{recipe.count}}</h3>
+              <h4>{{recipe.recipe.recipe_name}}</h4>
+              <h5>{{recipe.recipe.description}}</h5>
+              <p>Rating: {{recipe.average_rating}}</p>
+              <p><a href="/foodchaser/recipe_view/{{recipe.recipe.id}}" class="btn btn-primary" role="button">View Recipe</a>
+                {% else %}
+                <img src="/foodchaser/recipe/photo/{{recipe.id}}" width='200px' height='200px'>
+                <div class="caption">
+                  <h3>{{recipe.recipe_name}}</h3>
+                  <h4>By: {{recipe.owner.username}}</h4>
+                  <h5>Rating: {{recipe.rating}}</h5>
+                  <p><a href="/foodchaser/recipe_view/{{recipe.id}}" class="btn btn-primary" role="button">View Recipe</a>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              <section>
+
+      <section>
+    </div>
+  </div>
+  </div>
+
+</body>
+        </body>
+        
+        
+        </html>

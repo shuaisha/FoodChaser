@@ -1,0 +1,282 @@
+{% load selectable_tags %}
+<!DOCTYPE html>
+<html lang="en" class="demo-1 no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>My own recipes</title>
+
+
+    <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+  <!-- Those are for the use of autocomplete form -->
+  <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/themes/base/jquery-ui.css" type="text/css">
+  <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/dj.selectable.css" />
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+  <script src="{{ STATIC_URL }}js/jquery.dj.selectable.js"></script>
+
+	<!-- Latest compiled and minified JavaScript -->
+	<link href="{{ STATIC_URL }}font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="{{ STATIC_URL }}css/customCSS.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/sh_normalize.css" />
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/sh_component.css" />
+  <script src="{{ STATIC_URL }}js/snap.svg-min.js"></script>
+
+    <!-- For dropdown menu -->
+  <script src="{{ STATIC_URL }}js/bootstrap-select.js"></script>
+  <link href="{{ STATIC_URL }}css/bootstrap-select.css" rel="stylesheet">
+
+  </head>
+
+
+ <!-- A script for autocomplete tabs -->
+
+   <script type="text/javascript">
+    $(document).ready(function() {
+        $(':input[name=my_field_0]').bind('djselectableselect', function(event, ui) {
+            $(this).parents("form").submit();
+
+        }
+        );
+
+        function newParameters(query) {
+          query.category_1 = $('#id_category_1').val();
+          query.category_2 = $('#id_category_2').val();
+          query.ingredient = $('#id_ingredient').val();
+        }
+
+        $('#id_autocomplete').djselectable('option', 'prepareQuery', newParameters);
+
+        function formatLabel(label, item) {
+            var data = label;
+            return '<img src="/foodchaser/recipe/photo/' + item.id + '" height="42" width="42">' + label;
+        }
+
+        $('#id_autocomplete').djselectable('option', 'formatLabel', formatLabel);
+    });
+  </script>
+
+<!--   For the use of popover panel -->
+  <script type="text/javascript">
+    $(function () {
+      $('[data-toggle="popover"]').popover()
+    })
+  </script>
+
+  <!--   For selection -->
+  <script type="text/javascript">
+  $('.selectpicker').selectpicker();
+  </script>
+
+  <div nav>
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+          
+	      <div class="container navbar-header">
+	          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	              <span class ="sr-only">Toggle navigation</span>
+	              <span class="icon-bar"></span>
+	              <span class="icon-bar"></span>
+	              <span class="icon-bar"></span>
+	          </button>
+	          <a class="navbar-brand" href="{% url 'home' %}">RecipeHub</a>
+	      </div>
+             <div class="navbar-right">
+              <div class="navbar-collapse collapse">
+                  <ul class="nav navbar-nav navbar-left">
+
+                      <li> 
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingTwo" >
+                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                              Search Recipe
+                              </a>
+                            </div>
+                          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body">
+
+                              <form class="form-horizontal" role="form" method="get" action="{% url 'search' %}">
+                                <div class="form-group">
+                                <div class="col-sm-10">
+                                  <tr><td>
+                                    <input data-selectable-allow-new="false" data-selectable-type="text" data-selectable-url="/selectable/foodchaser-recipelookup/" id="id_autocomplete" name="autocomplete" type="text" placeholder="Type a recipe's name" /></td></tr>
+                                </div>
+                                </div>
+
+                                <div class="form-group">
+                                  <div class="col-sm-10">
+                                    <tr><th><label for="id_category_1">Select one category:</label></th><td>
+                                    <select id="id_category_1" name="category_1" class="selectpicker show-tick">
+                                    <option value="" selected="selected"></option>
+                                    <option value="Appetizers">Appetizers</option>
+                                    <option value="Main Dish">Main Dish</option>
+                                    <option value="Side Dish">Side Dish</option>
+                                    <option value="Soup">Soup</option>
+                                    </select></td></tr>
+                                    </div>
+                                </div>
+
+                              <div class="form-group">
+                                <div class="col-sm-10">
+                                  <tr><th><label for="id_category_2">Select an another category:</label></th><td>
+                                    <select id="id_category_2" name="category_2" class="selectpicker show-tick">
+                                      <option value="" selected="selected"></option>
+                                      <option value="Poultry">Poultry</option>
+                                      <option value="Pork">Pork</option>
+                                      <option value="Beef">Beef</option>
+                                      <option value="Seafood">Seafood</option>
+                                      <option value="Vegetables">Vegetables</option>
+                                    </select></td></tr>
+                                </div>
+                              </div>
+
+                              <div class="form-group">
+                                <div class="col-sm-10">
+                                  <tr><th><label for="id_ingredient">Type the keyword of ingredient you want to search:</label></th><td><input data-selectable-allow-new="false" data-selectable-type="text" data-selectable-url="/selectable/foodchaser-ingredientlookup/" id="id_ingredient" name="ingredient" type="text" /></td></tr>
+                                </div>
+                              </div>
+
+                                  <button type="submit" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                  </button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+
+                      </li>
+
+                      <li><a href="{% url 'recommend' %}" class="fa fa-spoon fa-lg" data-toggle="tooltip" data-placement="bottom" title="Recommend"></a></li>
+
+                      <li class="active"><a href="{% url 'home' %}"class="fa fa-book fa-lg" data-toggle="tooltip" data-placement="bottom" title="Recipe Box"></a></li>
+
+                      <li><a href="{% url 'get_planner' %}" class="fa fa-calendar-o fa-lg" data-toggle="tooltip" data-placement="bottom" title="Menu Planner"></a></li>
+
+                      <li><a href="{% url 'add_recipe' %}" class="fa fa-plus-square-o fa-lg" data-toggle="tooltip" data-placement="bottom" title="Add a Recipe"></a></li>
+                      
+                      <script type="text/javascript">
+                      $('a').tooltip();
+                      </script> 
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">More<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                          <li class="dropdown-header">Settings</li>
+                          <li><a href="{% url 'settings' %}">Preference Settings</a></li>
+                          <li class="divider"></li>
+
+                          <li class="dropdown-header">Virtual Restaurant</li>
+                          <li><a href="{% url 'virtual_restaurant' %}">View</a></li>
+                          <li><a href="{% url 'edit_virtual_menu' %}">Customize</a></li>
+                          <li class="divider"></li>
+
+                          <li class="dropdown-header">Actions</li>
+                          <li><a href="{% url 'change_password' %}">Change password</a></li>
+                          <li><a href="{% url 'logout' %}">Log Out</a></li>
+                        </ul>
+                      </li>
+                  </ul>
+                  
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- Nav bar ends-->
+<body>
+	
+<div class="media" id="profile_block">
+  <div class="media" id="profile_block">
+          <a class="media-left media-middle" href="#">
+            {% if profile.photo %}
+            <img src="profilephoto" alt="" width="150px" height="150px">
+            {% endif %}
+          </a>
+          <div class="media-body">
+            <h4 class-"media-heading">{{user}}</h4>
+            <h4>
+                  <button type="button" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="bottom" title="My current level" data-html="true" data-content='<div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{level.activityScore}}%;">
+                      {{level.activityScore}}%
+                    </div>
+                  </div>Current level: {{level.cur_title}}<div>
+                </div>Rating score: {{actual_score}}<span class="rating-static rating-{{avg_rating}}"></span><div>
+                    '>
+                    Check my level
+                  </button>
+            </h4>
+          </div>
+        </div>
+      </div>
+        
+	<ul class="nav nav-tabs nav-justified" role="tablist">
+		<li role="presentation"><a href="{% url 'favorites' %}">My favorites</a></li>
+		<li role="presentation" class="active"><a href="{% url 'home' %}">Go back</a></li>
+	  	<li role="presentation"><a href="{% url 'leftover' %}">Use leftovers</a></li>
+	</ul>
+
+	<!-- the second nav bar ends, put content below-->
+  <br>
+  <div class="container">
+      <div class="panel panel-default">
+    <div class="panel-heading"><h3>My own recipes</h3></div>
+    <div class="panel-body">
+      <section id="grid" class="grid clearfix">
+      {% for recipe in recipes %}
+      <a href="/foodchaser/recipe_view/{{recipe.id}}" data-path-hover="m 180,34.57627 -180,0 L 0,0 180,0 z">
+          <figure>
+              <img src="/foodchaser/recipe/photo/{{recipe.id}}" width="100px" height="300px" />
+              <svg viewBox="0 0 180 320" preserveAspectRatio="none"><path d="M 180,160 0,218 0,0 180,0 z"/></svg>
+              <figcaption>
+                  <h2>{{recipe.recipe_name}}</h2>
+                  <p>{{recipe.description}}</p>
+                  <button>View</button>
+              </figcaption>
+          </figure>
+      </a>
+      {% endfor %}
+      <section>
+    </div>
+  </div>
+  </div>
+
+
+        <script>
+            (function() {
+    
+                function init() {
+                    var speed = 250,
+                        easing = mina.easeinout;
+
+                    [].slice.call ( document.querySelectorAll( '#grid > a' ) ).forEach( function( el ) {
+                        var s = Snap( el.querySelector( 'svg' ) ), path = s.select( 'path' ),
+                            pathConfig = {
+                                from : path.attr( 'd' ),
+                                to : el.getAttribute( 'data-path-hover' )
+                            };
+
+                        el.addEventListener( 'mouseenter', function() {
+                            path.animate( { 'path' : pathConfig.to }, speed, easing );
+                        } );
+
+                        el.addEventListener( 'mouseleave', function() {
+                            path.animate( { 'path' : pathConfig.from }, speed, easing );
+                        } );
+                    } );
+                }
+
+                init();
+
+            })();
+        </script>
+</body>
+    
+</html>

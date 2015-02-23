@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Add recipe</title>
+
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+	<!-- Those are for the use of autocomplete form -->
+	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/themes/base/jquery-ui.css" type="text/css">
+	<link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/dj.selectable.css" />
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+	<script src="{{ STATIC_URL }}js/jquery.dj.selectable.js"></script>
+	<!--<script src="{{ STATIC_URL }}js/bootstrap3-typeahead.js"></script>-->
+	<script src="{{ STATIC_URL }}js/typeahead.bundle.js"></script>
+	<!--<script src="{{STATIC_URL}}js/bootstrap3-typeahead.min.js"></script>-->
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="{{ STATIC_URL }}js/star-rating.min.js" type="text/javascript"></script>
+	<link href="{{ STATIC_URL }}font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="{{ STATIC_URL }}css/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />
+	<link href="{{ STATIC_URL}}css/customCSS.css" rel="stylesheet">
+	<link href="{{ STATIC_URL}}css/typeahead.css" rel="stylesheet">
+	<script src="{{ STATIC_URL }}js/add-recipe.js" type="text/javascript"></script>
+
+	<!-- For dropdown menu -->
+	<script src="{{ STATIC_URL }}js/bootstrap-select.js"></script>
+	<link href="{{ STATIC_URL }}css/bootstrap-select.css" rel="stylesheet">
+
+	  <!-- For picture cropping -->
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/cropboxstyle.css" type="text/css" />
+  
+  <style>       
+  .action
+  {
+    width: 400px;
+    height: 30px;
+    margin: 10px 0;
+  }
+  .cropped>img
+  {
+    margin-right: 10px;
+  }
+  </style>
+</head>
+
+<!-- A script for autocomplete tabs -->
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$(':input[name=my_field_0]').bind('djselectableselect', function(event, ui) {
+		$(this).parents("form").submit();
+
+	}
+	);
+
+	function newParameters(query) {
+		query.category_1 = $('#id_category_1').val();
+		query.category_2 = $('#id_category_2').val();
+		query.ingredient = $('#id_ingredient').val();
+	}
+
+	$('#id_autocomplete').djselectable('option', 'prepareQuery', newParameters);
+
+	function formatLabel(label, item) {
+		var data = label;
+		return '<img src="/foodchaser/recipe/photo/' + item.id + '" height="42" width="42">' + label;
+	}
+
+	$('#id_autocomplete').djselectable('option', 'formatLabel', formatLabel);
+});
+</script>
+
+<!--   For the use of popover panel -->
+<script type="text/javascript">
+$(function () {
+	$('[data-toggle="popover"]').popover()
+})
+</script>
+
+<!--   For selection -->
+<script type="text/javascript">
+$('.selectpicker').selectpicker();
+</script>
+
+<div nav>
+	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+
+		<div class="container navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class ="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="{% url 'home' %}">RecipeHub</a>
+		</div>
+		<div class="navbar-right">
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-left">
+
+					<li> 
+						<div class="panel panel-default">
+							<div class="panel-heading" role="tab" id="headingTwo" >
+								<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+									Search Recipe
+								</a>
+							</div>
+							<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+								<div class="panel-body">
+
+									<form class="form-horizontal" role="form" method="get" action="{% url 'search' %}">
+										<div class="form-group">
+											<div class="col-sm-10">
+												<tr><td>
+													<input data-selectable-allow-new="false" data-selectable-type="text" data-selectable-url="/selectable/foodchaser-recipelookup/" id="id_autocomplete" name="autocomplete" type="text" placeholder="Type a recipe's name" /></td></tr>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<div class="col-sm-10">
+													<tr><th><label for="id_category_1">Select one category:</label></th><td>
+														<select id="id_category_1" name="category_1" class="selectpicker show-tick">
+															<option value="" selected="selected"></option>
+															<option value="Appetizers">Appetizers</option>
+															<option value="Main Dish">Main Dish</option>
+															<option value="Side Dish">Side Dish</option>
+															<option value="Soup">Soup</option>
+														</select></td></tr>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<div class="col-sm-10">
+														<tr><th><label for="id_category_2">Select an another category:</label></th><td>
+															<select id="id_category_2" name="category_2" class="selectpicker show-tick">
+																<option value="" selected="selected"></option>
+																<option value="Poultry">Poultry</option>
+																<option value="Pork">Pork</option>
+																<option value="Beef">Beef</option>
+																<option value="Seafood">Seafood</option>
+																<option value="Vegetables">Vegetables</option>
+															</select></td></tr>
+														</div>
+													</div>
+
+													<div class="form-group">
+														<div class="col-sm-10">
+															<tr><th><label for="id_ingredient">Type the keyword of ingredient you want to search:</label></th><td><input data-selectable-allow-new="false" data-selectable-type="text" data-selectable-url="/selectable/foodchaser-ingredientlookup/" id="id_ingredient" name="ingredient" type="text" /></td></tr>
+														</div>
+													</div>
+
+													<button type="submit" class="btn btn-default">
+														<span class="glyphicon glyphicon-search"></span>
+													</button>
+												</form>
+											</div>
+										</div>
+									</div>
+
+								</li>
+
+								<li><a href="{% url 'recommend' %}" class="fa fa-spoon fa-lg" data-toggle="tooltip" data-placement="bottom" title="Recommend"></a></li>
+
+								<li><a href="{% url 'home' %}" class="fa fa-book fa-lg" data-toggle="tooltip" data-placement="bottom" title="Recipe Box"></a></li>
+
+								<li><a href="{% url 'get_planner' %}" class="fa fa-calendar-o fa-lg" data-toggle="tooltip" data-placement="bottom" title="Menu Planner"></a></li>
+
+								<li class="active"><a href="{% url 'add_recipe' %}" class="fa fa-plus-square-o fa-lg" data-toggle="tooltip" data-placement="bottom" title="Add a Recipe"></a></li>
+
+								<script type="text/javascript">
+								$('a').tooltip();
+								</script> 
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown">More<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+										<li class="dropdown-header">Settings</li>
+										<li><a href="{% url 'settings' %}">Preference Settings</a></li>
+										<li class="divider"></li>
+
+										<li class="dropdown-header">Virtual Restaurant</li>
+										<li><a href="{% url 'virtual_restaurant' %}">View</a></li>
+										<li><a href="{% url 'edit_virtual_menu' %}">Customize</a></li>
+										<li class="divider"></li>
+
+										<li class="dropdown-header">Actions</li>
+										<li><a href="{% url 'change_password' %}">Change password</a></li>
+										<li><a href="{% url 'logout' %}">Log Out</a></li>
+									</ul>
+								</li>
+							</ul>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Nav bar ends-->
+			<body>
+
+				<div class="media" id="profile_block">
+					<a class="media-left media-middle" href="#">
+						{% if profile.photo %}
+						<img src="profilephoto" alt="" width="150px" height="150px">
+						{% endif %}
+					</a>
+					<div class="media-body">
+						<h4 class-"media-heading">{{user}}</h4>
+						<h4>
+					        <button type="button" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="bottom" title="My current level" data-html="true" data-content='<div class="progress">
+					          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{level.activityScore}}%;">
+					            {{level.activityScore}}%
+					          </div>
+					        </div>Current level: {{level.cur_title}}<div>
+					      </div>Rating score: {{actual_score}}<span class="rating-static rating-{{avg_rating}}"></span><div>
+					          '>
+					          Check my level
+					        </button>
+						</h4>
+					</div>
+				</div>
+
+				<!-- the second nav bar ends, put content below-->
+				<div class="container">
+					<br>
+					<br>
+					<!-- Add by URL form start-->
+					<div class="panel panel-default">
+						<div class="panel-heading">Add recipe by URL
+						</div>
+						<div class="panel-body">
+							<form class="form-inline" role="form" action="{% url 'add_link' %}" method="post">
+
+								{% for error in urlform.non_field_errors %}
+								<p style="color: red">
+									{{ error }}
+								</p>
+								{% endfor %}
+								<div class="form-group">
+									{{urlform.url}}
+									<div class="form-group">
+										<div class="input-group">
+											<div class="input-group-addon">And</div>
+											{{urlform.url_form_name}}
+										</div>
+									</div>
+								</div>
+								{% for field in form.hidden_fields %}
+								{{field}}
+								{% endfor %}
+								{% csrf_token %}
+								<button type="submit" class="btn btn-default">Add to my RecipeHub</button>
+							</form>
+						</div>
+					</div>
+					<!-- Add by URL form end-->
+					<br>
+					<br>
+					<br>
+					<!-- Add recipe form start-->
+					<div class="panel panel-default">
+						<div class="panel-heading">Create a recipe
+						</div>
+						<div class="panel-body">
+							<form role="form" action="{% url 'add_recipe' %}" method="post" enctype="multipart/form-data">
+							{% for error in recipeform.non_field_errors %}
+							<p style="color: red">{{ error }}</p>
+							{% endfor %}		     			
+								<div class="form-group">
+									<label for='id_recipe_name'>Name</label>{{recipeform.recipe_name}}
+									<label style="color: red">{{recipeform.recipe_name.errors}}</label>
+								</div>
+									<br>
+									<div>
+										<label for='id_private'>Private?</label>
+										{{recipeform.private}}
+										<label style="color: red">{{recipeform.private.errors}}</label>
+									</div>
+									<br>
+									<div class="form-group">
+										<label for="id_photo">Upload Image</label>
+										{{recipeform.photo}}
+										<label style="color: red">{{recipeform.photo.errors}}</label>
+										<br>
+										<!-- Crop picture -->                                   
+										<!-- Button trigger modal -->
+										<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+											Crop the recipe picture
+										</button>
+
+
+										<!-- Modal code -->
+										<!-- Modal only for cropping the dish picture -->
+										<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<div class="modal-header">
+														<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+														<h4 class="modal-title" id="myModalLabel">Crop the recipe picture</h4>
+													</div>
+													<div class="modal-body">
+
+														<!-- The modal window for cropping picture -->
+
+														<script src="{{ STATIC_URL }}js/cropbox.js"></script>
+														<div class="container">
+															<div class="imageBox">
+																<div class="thumbBox"></div>
+																<div class="spinner" style="display: none">Loading...</div>
+															</div>
+															<div class="action">
+																<!--                               <input type="file" id="file" style="float:left; width: 250px"> -->
+																<!-- <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="left" title="Just ">Crop</button> -->
+																<input type="button" id="btnCrop" value="Crop" style="float: right">
+																<input type="button" id="btnZoomIn" value="+" style="float: right">
+																<input type="button" id="btnZoomOut" value="-" style="float: right">
+															</div>
+															<p>
+																You will need to save the cropped picture manually. 
+																<br>
+																Just right-click the picture and choose "save picture as...".
+															</p>
+															<div class="row">
+																<div class="col-md-6">
+																	<div class="cropped">
+
+																	</div>
+																</div>
+<!-- 																<div class="col-md-6">
+																	You will need to save the cropped picture manually. Just right-click the picture and choose "save picture as...".
+																</div> -->
+															</div>
+														</div>
+
+													</div>
+
+													<div class="modal-footer">
+														<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+													</div>
+												</div>
+											</div>
+										</div>
+
+									</div>
+									<br>
+									<div class="form-group">
+										<label for='id_recipe_description'>Description</label>
+										{{recipeform.description}}
+										<label style="color: red">{{recipeform.description.errors}}</label>
+									</div>
+									<br>
+									<div class="form-group">
+										<label for="id_category1">Category:</label>
+										{{recipeform.category1}} {{recipeform.category2}}
+										<div class="form-inline">
+
+										</div>
+									</div>
+									<br>
+									<div class="form-group">
+										<label for="id_spicy">How spicy?</label>{{recipeform.spicy}}
+										<label style="color: red">{{recipeform.spicy.errors}}</label>
+									</div>
+									<br>
+
+									<div class="form-group">
+										<label for="ingradients">Ingredients:</label>
+										<table class="table table-hover table-bordered" id="ingredient-table">
+											<tr>
+												<th>Item</th>
+												<th>Quantity</th>
+												<th>Measure</th>
+												<th>Notes</th>
+											</tr>
+											<tr>
+												<td id="prefetch">{{ingredientsform.name}}</td>
+												<td>{{ingredientsform.quantity}}</td>
+												<td>{{ingredientsform.unit}}</td>
+												<td>{{ingredientsform.notes}}</td>
+											</tr>
+
+										</table>
+										<a onclick="addIngredient()">Add another item</a> <br>
+										<label style="color: red">{{ingredientsform.name.errors}}</label> <br>
+										<label style="color: red">{{ingredientsform.quantity.errors}}</label> <br>
+										<label style="color: red">{{ingredientsform.unit.errors}}</label>
+									</div>
+									<br>
+
+									<div class="form-group">
+										<label for="instruction">Instructions:</label>
+										<table class="table table-hover table-bordered" id="step-table">
+											<tr>
+												<th>Step</th>
+												<th>Prep Time (min)</th>
+												<th>Cook Time (min)</th>
+												<th>Picture</th>
+											</tr>
+											<tr>
+												<td>{{instructionform.text}}</td>
+												<td>{{instructionform.preptime}}</td>
+												<td>{{instructionform.cooktime}}</td>
+												<td>{{instructionform.picture}}</td>
+											</tr>
+
+
+										</table>
+										<a onclick="addStep()">Add another step</a> <br>
+										<label style="color: red">{{instructionform.text.errors}}</label> <br>
+										<label style="color: red">{{instructionform.preptime.errors}}</label> <br>
+										<label style="color: red">{{instructionform.cooktime.errors}}</label>
+										<br>
+										<br>
+										<label for="id_estimated_time">Estimated total time:
+											{{recipeform.estimated_time}}
+										<label style="color: red">{{recipeform.estimated_time.errors}}</label>
+
+										</div>
+										<button type="submit" class="btn btn-primary pull-right">Submit</button>
+										<input type = "hidden", name = "user", value = "{{user.id}}">
+										{% csrf_token %}
+									</form>
+									<!-- Add recipe form end -->
+								</div>
+							</div>
+
+							<style>
+							.panel-body {
+								background:#F1F1F1;
+							}
+							</style>
+							<script>
+							var ingredients = new Bloodhound({
+								datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+								queryTokenizer: Bloodhound.tokenizers.whitespace,
+								limit: 10,
+								prefetch: {
+    // url points to a json file that contains an array of country names, see
+    // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
+    url: '{{ STATIC_URL }}ingredients.json',
+    // the json file contains an array of strings, but the Bloodhound
+    // suggestion engine expects JavaScript objects so this converts all of
+    // those strings
+    filter: function(list) {
+    	return $.map(list, function(ingredients) { return { name: ingredients }; });
+    }
+}
+});
+
+// kicks off the loading/processing of `local` and `prefetch`
+ingredients.initialize();
+
+// passing in `null` for the `options` arguments will result in the default
+// options being used
+$('#prefetch .typeahead').typeahead(null, {
+	name: 'ingredients',
+	displayKey: 'name',
+  // `ttAdapter` wraps the suggestion engine in an adapter that
+  // is compatible with the typeahead jQuery plugin
+  source: ingredients.ttAdapter()
+});
+
+</script>
+<!--	<script>
+	var f = document.createElement("form");
+	f.setAttribute('method',"post");
+	f.setAttribute('action',"submit.php");
+	
+	var i = document.createElement("input"); //input element, text
+	i.setAttribute('type',"text");
+	i.setAttribute('name',"username");
+	
+	var s = document.createElement("input"); //input element, Submit button
+	s.setAttribute('type',"submit");
+	s.setAttribute('value',"Submit");
+	
+	f.appendChild(i);
+	f.appendChild(s);
+	
+	//and some more input elements here
+	//and dont forget to add a submit button
+	
+	document.getElementsByTagName('body')[0].appendChild(f);
+	
+</script>-->
+</div>
+<!-- container end-->
+</body>
+<script type="text/javascript">
+window.onload = function() {
+	var options =
+	{
+		imageBox: '.imageBox',
+		thumbBox: '.thumbBox',
+		spinner: '.spinner',
+	}
+	var cropper;
+	document.querySelector('#id_photo').addEventListener('change', function(){
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			options.imgSrc = e.target.result;
+			cropper = new cropbox(options);
+		}
+		reader.readAsDataURL(this.files[0]);
+		this.files = [];
+	})
+	document.querySelector('#btnCrop').addEventListener('click', function(){
+		var img = cropper.getDataURL()
+		document.querySelector('.cropped').innerHTML = '<img src="'+img+'">';
+	})
+	document.querySelector('#btnZoomIn').addEventListener('click', function(){
+		cropper.zoomIn();
+	})
+	document.querySelector('#btnZoomOut').addEventListener('click', function(){
+		cropper.zoomOut();
+	})
+};
+</script>
+<br>
+<br>
+<br>
+<br>
+</html>

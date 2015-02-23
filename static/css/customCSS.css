@@ -1,0 +1,110 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Sep 3, 2014, 1:42:36 AM
+    Author     : Xing Chen
+*/
+
+body {
+    padding-top: 100px;
+    padding-bottom: 100px;
+    background-color: #F0EEE5;
+}
+body, html, main {
+    height: 100%;
+}
+.navbar {
+    background : rgba(120, 120, 120, 0.7);
+}
+.navbar li {
+    color : #000;
+}
+.navbar-default {
+    border-color: #FFFFFF;
+    color: #FFFFFF;
+}
+.navbar-default .navbar-brand {
+    color: #000;
+}
+
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+    color: #31b0d5;
+}
+.navbar-default .navbar-nav > li > a {
+    color: black;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover
+.navbar-default .navbar-nav > .active > a:focus {
+    color: gray;
+    background-color: gray;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+    color: white;
+}
+.navbar-default .narbar-nav > .open > a,
+.navbar-default .narbar-nav > .open > a:hover
+.navbar-default .narbar-nav > .open > a:focus {
+    color: gray;
+    background-color: #1A242F;
+}
+
+
+.nav.active > a,
+.navbar-default .navbar-nav > .active > a:hover
+.navbar-default .navbar-nav > .active > a:focus {
+    color: black;
+    background-color: gray;
+}
+
+.profilePic
+{
+    padding-left: 30px;
+    padding-top: 30px;
+}
+.infoTable
+{
+    padding-top: 50px;
+    padding-right: 50px;
+}
+
+.cd-fixed-bg {
+    min-height: 50%;
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+ 
+.cd-fixed-bg.cd-bg-1 {
+  background-image: url("../img/meat.jpg");
+}
+.cd-fixed-bg.cd-bg-2 {
+  background-image: url("../img/liangpi.jpg");
+}
+.cd-fixed-bg.cd-bg-3 {
+  background-image: url("../img/onion.jpg");
+}
+.cd-fixed-bg.cd-bg-4 {
+  background-image: url("../img/strawberry.jpg");
+}
+ 
+.cd-scrolling-bg {
+    min-height: 10%;
+
+}
+#profile_block {
+    background-color:#383838;
+    color:white;
+    text-align:center;
+    padding:5px;
+}
+.centered {
+    float: none;
+    margin: 0 auto;
+}

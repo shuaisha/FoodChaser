@@ -1,0 +1,532 @@
+{% load selectable_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:image" content="http://localhost:8000/foodchaser/recipe/photo/{{recipe.id}}"/>
+    <meta property="og:title" content="{{recipe.name}}"/>
+    <meta property="og:url" content="http://localhost:8000/foodchaser/recipe_view/{{recipe.id}}"/>
+    <meta property="og:site_name" content="RecipeHub"/>
+    
+    <title>Recipe View</title>
+
+    <!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+	<!-- Those are for the use of autocomplete form -->
+	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/themes/base/jquery-ui.css" type="text/css">
+	<link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/dj.selectable.css" />
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+	<script src="{{ STATIC_URL }}js/jquery.dj.selectable.js"></script>
+	<link href="{{ STATIC_URL }}font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="{{ STATIC_URL }}css/customCSS.css" rel="stylesheet">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="{{STATIC_URL}}js/star-rating.min.js" type="text/javascript"></script>
+	<link href="{{STATIC_URL}}css/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />
+
+	<!-- Plugin js -->
+	<script src="{{ STATIC_URL }}js/facebook.js"></script>
+	<script src="{{ STATIC_URL }}js/twitter.js"></script>
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+	<!-- For dropdown menu -->
+  	<script src="{{ STATIC_URL }}js/bootstrap-select.js"></script>
+  	<link href="{{ STATIC_URL }}css/bootstrap-select.css" rel="stylesheet">
+
+  </head>
+
+ <!-- A script for autocomplete tabs -->
+
+   <script type="text/javascript">
+    $(document).ready(function() {
+        $(':input[name=my_field_0]').bind('djselectableselect', function(event, ui) {
+            $(this).parents("form").submit();
+
+        }
+        );
+
+        function newParameters(query) {
+        	query.category_1 = $('#id_category_1').val();
+        	query.category_2 = $('#id_category_2').val();
+          query.ingredient = $('#id_ingredient').val();
+        }
+
+        $('#id_autocomplete').djselectable('option', 'prepareQuery', newParameters);
+
+        function formatLabel(label, item) {
+            var data = label;
+            return '<img src="/foodchaser/recipe/photo/' + item.id + '" height="42" width="42">' + label;
+        }
+
+        $('#id_autocomplete').djselectable('option', 'formatLabel', formatLabel);
+    });
+	</script>
+
+<!--   For the use of popover panel -->
+  <script type="text/javascript">
+    $(function () {
+      $('[data-toggle="popover"]').popover()
+    })
+  </script>
+
+  <!--   For selection -->
+  <script type="text/javascript">
+  $('.selectpicker').selectpicker();
+  </script>
+
+<div nav>
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+          
+	      <div class="container navbar-header">
+	          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	              <span class ="sr-only">Toggle navigation</span>
+	              <span class="icon-bar"></span>
+	              <span class="icon-bar"></span>
+	              <span class="icon-bar"></span>
+	          </button>
+	          <a class="navbar-brand" href="{% url 'home' %}">RecipeHub</a>
+	      </div>
+             <div class="navbar-right">
+              <div class="navbar-collapse collapse">
+                  <ul class="nav navbar-nav navbar-left">
+
+                      <li> 
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingTwo" >
+                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                              Search Recipe
+                              </a>
+                            </div>
+                          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body">
+
+                              <form class="form-horizontal" role="form" method="get" action="{% url 'search' %}">
+                                <div class="form-group">
+                                <div class="col-sm-10">
+                                  <tr><td>
+                                    <input data-selectable-allow-new="false" data-selectable-type="text" data-selectable-url="/selectable/foodchaser-recipelookup/" id="id_autocomplete" name="autocomplete" type="text" placeholder="Type a recipe's name" /></td></tr>
+                                </div>
+                                </div>
+
+                                <div class="form-group">
+                                  <div class="col-sm-10">
+                                    <tr><th><label for="id_category_1">Select one category:</label></th><td>
+                                    <select id="id_category_1" name="category_1" class="selectpicker show-tick">
+                                    <option value="" selected="selected"></option>
+                                    <option value="Appetizers">Appetizers</option>
+                                    <option value="Main Dish">Main Dish</option>
+                                    <option value="Side Dish">Side Dish</option>
+                                    <option value="Soup">Soup</option>
+                                    </select></td></tr>
+                                    </div>
+                                </div>
+
+                              <div class="form-group">
+                                <div class="col-sm-10">
+                                  <tr><th><label for="id_category_2">Select an another category:</label></th><td>
+                                    <select id="id_category_2" name="category_2" class="selectpicker show-tick">
+                                      <option value="" selected="selected"></option>
+                                      <option value="Poultry">Poultry</option>
+                                      <option value="Pork">Pork</option>
+                                      <option value="Beef">Beef</option>
+                                      <option value="Seafood">Seafood</option>
+                                      <option value="Vegetables">Vegetables</option>
+                                    </select></td></tr>
+                                </div>
+                              </div>
+
+                              <div class="form-group">
+                                <div class="col-sm-10">
+                                  <tr><th><label for="id_ingredient">Type the keyword of ingredient you want to search:</label></th><td><input data-selectable-allow-new="false" data-selectable-type="text" data-selectable-url="/selectable/foodchaser-ingredientlookup/" id="id_ingredient" name="ingredient" type="text" /></td></tr>
+                                </div>
+                              </div>
+
+                                  <button type="submit" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                  </button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+
+                      </li>
+
+                      <li><a href="{% url 'recommend'%}" class="fa fa-spoon fa-lg" data-toggle="tooltip" data-placement="bottom" title="Recommend"></a></li>
+
+                      <li><a href="{% url 'home'%}" class="fa fa-book fa-lg" data-toggle="tooltip" data-placement="bottom" title="Recipe Box"></a></li>
+
+                      <li><a href="{% url 'menuplanner'%}" class="fa fa-calendar-o fa-lg" data-toggle="tooltip" data-placement="bottom" title="Menu Planner"></a></li>
+
+                      <li><a href="{% url 'add_recipe'%}" class="fa fa-plus-square-o fa-lg" data-toggle="tooltip" data-placement="bottom" title="Add a Recipe"></a></li>
+                      
+                      <script type="text/javascript">
+                      $('a').tooltip();
+                      </script> 
+                      <li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">More<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li class="dropdown-header">Settings</li>
+							<li><a href="{% url 'settings' %}">Preference Settings</a></li>
+							<li class="divider"></li>
+
+							<li class="dropdown-header">Virtual Restaurant</li>
+							<li><a href="{% url 'virtual_restaurant' %}">View</a></li>
+							<li><a href="{% url 'edit_virtual_menu' %}">Customize</a></li>
+							<li class="divider"></li>
+
+							<li class="dropdown-header">Actions</li>
+							<li><a href="{% url 'change_password' %}">Change password</a></li>
+							<li><a href="{% url 'logout' %}">Log Out</a></li>
+						</ul>
+					</li>
+                  </ul>
+
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- Nav bar ends-->
+<body>
+	<!--
+	<div class="row">
+		<div class="col-xs-3 col-md-2 col-xs-offset-1">
+		<a href="#" class="thumbnail">
+			<img src="/foodchaser/recipe/photo/{{recipe.id}}" width="150px">
+		</a>
+		<a href="{% url 'add_favorite' recipe.id %}">Add to favorites</a>
+		</div>
+		<div class="col-xs-3 col-md-4">
+			<div class="panel panel-default">
+				<h1>{{recipe.name}}</h1>
+				<h3>Ready in {{recipe.estimated_time}} min</h3>
+				<h3>Current rating: {{recipe.rating}}</h3>
+				<form role="form" action="{% url 'rate' %}" method="post">
+					{{rating}}
+					<input type="hidden" name="rid" value="{{recipe.id}}" >
+					{% csrf_token %}
+					<button type="submit" class="btn btn-primary">rate!</button>
+				</form>
+				<p>Share via</p>
+				<div class="fb-share-button" data-href="http://localhost:8000/foodchaser/recipe_view/{{recipe.id}}"></div><br>
+			  	<a href="http://localhost:8000/foodchaser/recipe_view/{{recipe.id}}" class="twitter-share-button">Tweet</a>
+				<div class="g-plus" data-action="share"></div>
+			</div>
+		</div>
+	</div>
+-->
+	<div class="row">
+		<div class="col-xs-8 col-md-8 col-xs-offset-1">
+			<div class="media">
+			<a class="media-left pull-left" href="#">
+			<img src="/foodchaser/recipe/photo/{{recipe.id}}" height="350px" width="350px" alt="...">
+			</a>
+			
+
+			<div class="media-body">
+			<div class="col-md-offset-2 col-xs-offset-2">
+				<h4>{{recipe.category1}}-{{recipe.category2}}</h4>
+				<h3><b>{{recipe.recipe_name}}</b></h3>
+				<h4>Ready in {{recipe.estimated_time}} min</h4>
+				<br>
+				<h4>Spicy
+				<input class="rating" data-size="s" data-step="1" value="{{recipe.spicy}}" name="rate" type="text" disabled/></h4>
+				{% if user == recipe.owner %}
+				<h4>Current rating: {{recipe.rating}}
+				<input class="rating" data-size="s" data-step="1" value="{{recipe.rating}}" name="rate" type="text" disabled/></h4>
+				{% else %}
+				<h4>Current rating: {{recipe.rating}}</h4>
+				<form role="form" action="{% url 'rate' %}" method="post" id="rate">
+					{{rating}}
+					<input type="hidden" name="rid" value="{{recipe.id}}">
+					{% csrf_token %}
+					
+				</form>
+				{% endif %}
+				<br>
+				<div class="btn-group" role="group" aria-label="...">
+				<input type="submit" value="Rate!" form="rate" class="btn btn-success">
+				{% if user == recipe.owner %}
+				<a href="{% url 'edit' recipe.id %}" class="btn btn-primary" role="button">Edit</a>
+				<a href="{% url 'delete' recipe.id %}" class="btn btn-danger" role="button">Delete</a>
+				{% endif %}
+				<a href="{% url 'add_favorite' recipe.id %}" class="btn btn-warning" role="button">Favorite</a>
+				</div>
+				<br>
+				<br>
+				<p>Share via</p>
+				<div class="row">
+					<div class="col-md-2 col-xs-2"><a href="http://localhost:8000/foodchaser/recipe_view/{{recipe.id}}" class="twitter-share-button">Tweet</a></div>
+					<div class="col-md-2 col-xs-2"><a class="fb-share-button" data-href="http://localhost:8000/foodchaser/recipe_view/{{recipe.id}}"></a></div>
+					<div class="col-md-2 col-xs-2"><a class="g-plus" data-action="share"></a></div>
+				</div>
+			</div>
+			</div>
+			</div>
+		</div>
+	</div>
+	<br>
+	<br>
+	<div class="row">
+		<div class="col-xs-6 col-md-6 col-xs-offset-1">
+			<div class="panel panel-default">
+			<p>Recipe provided by {{recipe.owner.first_name}} {{recipe.owner.last_name}} @{{recipe.owner.username}}</p>
+			<p>{{recipe.description}}</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-6 col-md-6 col-xs-offset-1">
+			<h3>Ingredients</h3>
+				<table class="table table-hover table-bordered">
+						<tr>
+							<th class="col-xs-2 col-md-2">Item</th>
+							<th class="col-xs-1 col-md-1">Quantity</th>
+							<th class="col-xs-1 col-md-1">Measure</th>
+							<th class="col-xs-4 col-md-4">Notes</th>
+						</tr>
+						{% for i in ingredients %}
+					 	<tr>
+					 		<td>{{i.ingredient.name}}</td>
+					 		<td>{{i.quantity}}</td>
+					 		<td>{{i.unit}}</td>
+					 		<td>{{i.notes}}</td>
+					 	</tr>
+					 	{% endfor %}
+
+				</table>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-xs-6 col-md-6 col-xs-offset-1">
+				<h3>Steps</h3>
+				<table class="table table-hover table-bordered">
+					<tr>
+
+						<th class="col-xs-4 col-md-4">Step</th>
+						<th class="col-xs-1 col-md-1">Prep (min)</th>
+						<th class="col-xs-1 col-md-1">Cook (min)</th>
+						<th class="col-xs-2 col-md-2">Picture</th>
+					</tr>
+
+					{% for step in steps %}
+				 	<tr>				 		
+				 		<td>{{step.text}}</td>
+				 		<td>{{step.preptime}}</td>
+				 		<td>{{step.cooktime}}</td>
+				 		<td>
+				 		{% if step.picture %}
+				 			
+				 			<img src="/foodchaser/step/photo/{{step.id}}" alt="" width="100px">
+				 		{% else %}
+				 		Image not available
+				 			{% endif %}
+				 			</td>
+				 	</tr>
+				 	{% endfor %}
+
+				</table>
+
+						
+		
+			<form role="form" action="{% url 'comment' %}" method="post">
+				<div class="form-group">
+
+					{{comment}}
+					{% csrf_token %}
+					<input type="hidden" name="id" value="{{recipe.id}}" >
+					<button type="submit" class="btn btn-primary">Comment</button>
+				</div>
+			</form>
+			<br>
+			<div class="panel panel-success">
+				<div class="panel-heading">Recent reviews</div>
+				<div class="panel-body">
+					<ul class="list-group">
+						{% for comment in comments %}
+							<li class="list-group-item"> {{comment.text}} @ {{comment.owner}} {{ comment.time }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+			
+		
+	</div>
+				<div class="col-xs-4 col-md-4 col-xs-offset-1">
+				<h3>Timer</h3>
+				<div class="container">
+					<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+					<div id="main">
+
+					<div class="content">
+						<input type="number" id="cook_time">Time
+						<button onclick="startTimer()">Start</button>
+						<button onclick="stopTimer()">Stop</button>						
+					<div class="text">
+						<h2 id="cooking_step_state" color="white"></h2>
+					</div> <!-- /.Text Div -->
+					<div class="counter">
+					<h3>Estimated Time Remaining:</h3>
+					<div id="countdown">
+					</div><!-- /#Countdown Div -->
+					</div> <!-- /.Counter Div -->
+					</div> <!-- /.Content Div -->
+					</div> <!-- /#Main Div -->
+					</div> <!-- /.Columns Div -->
+					</div> <!-- /.Row Div -->
+					</div> <!-- /.Container Div -->
+			</div>	
+</div>
+				
+<br>
+<br>
+<br>
+<br>
+</body>
+<style>
+.container {
+  margin: 0px auto;
+  padding: 0px;
+}
+#main { 
+  background: #3B3B3B;
+  height: 330px;
+}
+.content {
+  padding: 10px 44px;
+}
+.text {
+  border-bottom: 1px solid #262626;
+  margin-top: 40px;
+  padding-bottom: 20px;
+  text-align: center;
+}
+.text h2 {
+  color: #E5E5E5;
+  font-size: 30px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: lighter;
+  letter-spacing: 2px;
+}
+.counter {
+  background: #2C2C2C;
+  -moz-box-shadow:    inset 0 0 5px #000000;
+  -webkit-box-shadow: inset 0 0 5px #000000;
+  box-shadow:         inset 0 0 5px #000000;
+  min-height: 150px;
+  text-align: center;
+}
+.counter h3 {
+  color: #E5E5E5;
+  font-size: 14px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: lighter;
+  letter-spacing: 1px;
+  padding-top: 20px;
+  margin-bottom: 30px;
+}
+#countdown {
+  color: #FFFFFF;
+}
+#countdown span {
+  color: #E5E5E5;
+  font-size: 26px;
+  font-weight: normal;
+  margin-left: 20px;
+  margin-right: 20px;
+  text-align: center;
+}
+</style>
+<script>
+var cook_time_interval;
+var audio = new Audio('{{STATIC_URL}}audio/ticktac.mp3');
+// update the tag with id "countdown" every 1 second
+function startTimer() {
+	if (cook_time_interval) {
+		clearInterval(cook_time_interval);
+	}
+	document.getElementById('cooking_step_state').innerHTML = "Cooking ...";
+	function addMinutes(date, min) {
+	return new Date(date.getTime()+min*60000);
+}
+	function getTargetTime(min) {
+		var temp1 = new Date();
+		var temp2 = addMinutes(temp1, min);
+		var result = temp2.getTime();
+		return result;
+	}
+	var cook_time_min = document.getElementById('cook_time').value;
+	// set the date we're counting down to
+	var target_date = getTargetTime(cook_time_min);
+	 
+	// variables for time units
+	var hours, minutes, seconds;
+	 
+	// get tag element
+	var countdown = document.getElementById('countdown');
+	cook_time_interval = setInterval(function () {
+    // find the amount of "seconds" between now and target
+    var current_date = new Date().getTime();
+    var seconds_left = (target_date - current_date) / 1000;
+ 
+    // do some time calculations
+    days = parseInt(seconds_left / 86400);
+    seconds_left = seconds_left % 86400;
+     
+    hours = parseInt(seconds_left / 3600);
+    seconds_left = seconds_left % 3600;
+     
+    minutes = parseInt(seconds_left / 60);
+    seconds = parseInt(seconds_left % 60);
+    if(seconds_left <= 0) {
+    	audio.play();
+    	document.getElementById('cooking_step_state').innerHTML = "Time is UP!";
+    	countdown.innerHTML = '<span class="hours">' + 0 + ' <b>Hours</b></span> <span class="minutes">'
+    + 0 + ' <b>Minutes</b></span> <span class="seconds">' + 0 + ' <b>Seconds</b></span>';
+    }
+    // format countdown string + set tag value
+    else {
+	    	countdown.innerHTML = '<span class="hours">' + hours + ' <b>Hours</b></span> <span class="minutes">'
+	    + minutes + ' <b>Minutes</b></span> <span class="seconds">' + seconds + ' <b>Seconds</b></span>';  
+    	}
+	}, 1000);
+}
+function stopTimer() {
+	if(cook_time_interval){
+		clearInterval(cook_time_interval);
+	}
+	document.getElementById('cooking_step_state').innerHTML = "";
+	var countdown = document.getElementById('countdown');
+	countdown.innerHTML = '<span class="hours">' + 0 + ' <b>Hours</b></span> <span class="minutes">'
+    + 0 + ' <b>Minutes</b></span> <span class="seconds">' + 0 + ' <b>Seconds</b></span>'
+}
+</script>
+	
+<br>
+
+<br>
+<br>
+<br>
+<br>
+</body>
+<style type="text/css">
+body {
+	background-color: #ffffff;
+}
+</style>
+</html>

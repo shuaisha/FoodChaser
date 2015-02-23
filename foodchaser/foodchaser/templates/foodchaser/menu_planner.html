@@ -1,0 +1,411 @@
+{% load selectable_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Menu Planner</title>
+
+  <!-- CONFLICT!! Need to be solved
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+-->
+    <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.easyui.min.js"></script>
+  <link href="{{ STATIC_URL }}font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}css/customCSS.css" rel="stylesheet">
+
+  </head>
+
+   <!-- A script for autocomplete tabs -->
+
+
+
+  <div nav>
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+          
+        <div class="container navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class ="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'home' %}">RecipeHub</a>
+        </div>
+             <div class="navbar-right">
+              <div class="navbar-collapse collapse">
+                  <ul class="nav navbar-nav navbar-left">
+
+                      <li><a href="{% url 'recommend' %}" class="fa fa-spoon fa-lg" data-toggle="tooltip" data-placement="bottom" title="Recommend"></a></li>
+
+                      <li><a href="{% url 'home' %}"class="fa fa-book fa-lg" data-toggle="tooltip" data-placement="bottom" title="Recipe Box"></a></li>
+
+                      <li class="active"><a href="{% url 'get_planner' %}" class="fa fa-calendar-o fa-lg" data-toggle="tooltip" data-placement="bottom" title="Menu Planner"></a></li>
+
+                      <li><a href="{% url 'add_recipe' %}" class="fa fa-plus-square-o fa-lg" data-toggle="tooltip" data-placement="bottom" title="Add a Recipe"></a></li>
+                      
+                      <script type="text/javascript">
+                      $('a').tooltip();
+                      </script> 
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">More<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                          <li class="dropdown-header">Settings</li>
+                          <li><a href="{% url 'settings' %}">Preference Settings</a></li>
+                          <li class="divider"></li>
+
+                          <li class="dropdown-header">Virtual Restaurant</li>
+                          <li><a href="{% url 'virtual_restaurant' %}">View</a></li>
+                          <li><a href="{% url 'edit_virtual_menu' %}">Customize</a></li>
+                          <li class="divider"></li>
+
+                          <li class="dropdown-header">Actions</li>
+                          <li><a href="{% url 'change_password' %}">Change password</a></li>
+                          <li><a href="{% url 'logout' %}">Log Out</a></li>
+                        </ul>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- Nav bar ends-->
+<body>
+  
+  <div class="media" id="profile_block">
+          <a class="media-left media-middle" href="#">
+            {% if profile.photo %}
+            <img src="profilephoto" alt="" width="150px" height="150px">
+            {% endif %}
+          </a>
+          <div class="media-body">
+            <h4 class-"media-heading">{{user}}</h4>
+            <h4>
+                  <button type="button" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="bottom" title="My current level" data-html="true" data-content='<div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{level.activityScore}}%;">
+                      {{level.activityScore}}%
+                    </div>
+                  </div>Current level: {{level.cur_title}}<div>
+                </div>Rating score: {{actual_score}}<span class="rating-static rating-{{avg_rating}}"></span><div>
+                    '>
+                    Check my level
+                  </button>
+            </h4>
+          </div>
+  </div>
+  <!-- the second nav bar ends, put content below-->
+<div class="container">
+
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3>Plan My Meal</h3>
+    </div>
+    <div class="panel-body">
+  <div class="row">
+    <div class= "col-xs-2 col-md-2">
+      <div class="left">
+
+        <!--
+        <table class="table table-bordered">
+          <tr>
+            <td><div class="item"><a id="1">Chicken</a></div></td>
+          </tr>
+        </table>
+      -->
+      <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="dropdownMenu1" aria-expand="true">
+          Browse my collection
+          <span class="caret"><span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+
+          {% for recipe in recipes %}
+            <li role="presentation">
+              <div class="item" role="menuitem" tabline="-1"><a id="{{recipe.id}}">{{recipe.recipe_name}}</a>
+              </div>
+            </li>
+          {{recipe.name}}
+          {% endfor %}
+        </ul>
+      </div>
+      <br>
+      <div class="media">
+        <a class="media-left" href="#">
+          <img src="{{ STATIC_URL}}img/128 px/179.png" alt="..">
+        </a>
+        <div class="media-body">
+          <br>
+          <h4 class="media-heading">Discard Area</h4>
+        </div>
+      </div>
+      </div>
+    </div>
+    <div class= "col-xs-10 col-md-10">
+      <div class="right">
+        <table class="table table-bordered" id="planner_table">
+          <tr>
+            <th class="col-xs-1 col-md-1"></th>
+            <th class="col-xs-1 col-md-1">Sunday</th>
+            <th class="col-xs-1 col-md-1">Monday</th>
+            <th class="col-xs-1 col-md-1">Tuesday</th>
+            <th class="col-xs-1 col-md-1">Wednesday</th>
+            <th class="col-xs-1 col-md-1">Thursday</th>
+            <th class="col-xs-1 col-md-1">Friday</th>
+            <th class="col-xs-1 col-md-1">Saturday</th>
+          </tr>
+          <tr>
+            <th>Breakfast</th>
+            <td class="drop" id="sunday_breakfast">
+              {% for item in sunday_breakfast %}
+                <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}
+            </td>
+            <td class="drop" id="monday_breakfast">
+              {% for item in monday_breakfast %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}
+            </td>
+            <td class="drop" id="tuesday_breakfast">
+              {% for item in tuesday_breakfast %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}
+            </td>
+            <td class="drop" id="wednesday_breakfast">
+              {% for item in wednesday_breakfast %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}
+            </td>
+            <td class="drop" id="thursday_breakfast">
+              {% for item in thursday_breakfast %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}</td>
+            <td class="drop" id="friday_breakfast">
+              {% for item in friday_breakfast %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}</td>
+            <td class="drop" id="saturday_breakfast">
+              {% for item in saturday_breakfast %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}</td>
+          </tr>
+          <tr>
+            <th>Lunch</th>
+            <td class="drop" id="sunday_lunch">
+              {% for item in sunday_lunch %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}
+            </td>
+            <td class="drop" id="monday_lunch">
+              {% for item in monday_lunch %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}
+            </td>
+            <td class="drop" id="tuesday_lunch">
+              {% for item in tuesday_lunch %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}
+            </td>
+            <td class="drop" id="wednesday_lunch">
+              {% for item in wednesday_lunch %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}
+            </td>
+            <td class="drop" id="thursday_lunch">
+              {% for item in thursday_lunch %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}
+            </td>
+            <td class="drop" id="friday_lunch">
+              {% for item in friday_lunch %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}
+            </td>
+            <td class="drop" id="saturday_lunch">
+              {% for item in saturday_lunch %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}
+            </td>
+          </tr>
+          <tr>
+            <th>Dinner</th>
+            <td class="drop" id="sunday_dinner">
+              {% for item in sunday_dinner %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}
+            </td>
+            <td class="drop" id="monday_dinner">
+              {% for item in monday_dinner %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}
+            </td>
+            <td class="drop" id="tuesday_dinner">
+              {% for item in tuesday_dinner %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}</td>
+            <td class="drop" id="wednesday_dinner">
+              {% for item in wednesday_dinner %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}
+            </td>
+            <td class="drop" id="thursday_dinner">
+              {% for item in thursday_dinner %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}</td>
+            <td class="drop" id="friday_dinner">
+              {% for item in friday_dinner %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}
+            </td>
+            <td class="drop" id="saturday_dinner">
+              {% for item in saturday_dinner %}
+              <div class="item assigned"><a id="{{item.id}}">{{item.recipe_name}}</a></div>
+              {% endfor %}
+            </td>
+          </tr>
+        </table>
+        <button class="btn btn-success" onclick='foo()'>Save</button>
+    </div>
+  </div>
+  <br>
+  
+</body>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style type="text/css">
+    
+    .right td.drop{
+      background:#fafafa;
+      width:100px;
+    }
+    .right td.over{
+      background:#FBEC88;
+    }
+    .item{
+      text-align:center;
+      background:#fcf8e3;
+      color:#c09853;
+      width:100px;
+    }
+    .assigned{
+      background-color: #ebf5e6;
+      border: 1px solid #d6e9c6;
+      color: #468847;
+    }
+    .trash{
+      background-color:red;
+    }
+    .dropdown-menu li {
+      margin: 5px;
+      padding: 5px;
+      -webkit-border-radius: 4px;
+      -moz-border-radius: 4px;
+      border-radius: 4px;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+      background-color: #fcf8e3;
+      border: 1px solid #fbeed5;
+      color: #c09853;
+
+    }
+    
+  </style>
+  <script>
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+    $(function(){
+      $('.left .item').draggable({
+        revert:true,
+        proxy:'clone'
+      });
+      $('.right .item').draggable({
+        revert:true,
+      });
+      $('.right td.drop').droppable({
+        onDragEnter:function(){
+          $(this).addClass('over');
+        },
+        onDragLeave:function(){
+          $(this).removeClass('over');
+        },
+        onDrop:function(e,source){
+          $(this).removeClass('over');
+          if ($(source).hasClass('assigned')){
+            $(this).append(source);
+          } else {
+            var c = $(source).clone().addClass('assigned');
+            $(this).append(c);
+            c.draggable({
+              revert:true
+            });
+          }
+        }
+      });
+      $('.left').droppable({
+        accept:'.assigned',
+        onDragEnter:function(e,source){
+          $(source).addClass('trash');
+        },
+        onDragLeave:function(e,source){
+          $(source).removeClass('trash');
+        },
+        onDrop:function(e,source){
+          $(source).remove();
+        }
+      });
+    });
+    function foo(){
+      var req;
+      var items = [];
+      $('#planner_table tr td').each(function(){
+        var cell = $(this).attr('id');
+        var dishs = $(this).children().children();
+        dishs.each(function(){
+          var dish = $(this).attr('id');
+          item = {key: cell, value: dish};
+          items.push(item);
+        });
+        
+      });
+      var jsonData = JSON.stringify(items);
+      console.log(jsonData);
+      $.ajaxSetup({ 
+     beforeSend: function(handleResponse, settings) {
+         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+             handleResponse.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          }  
+        } 
+    });
+      req = $.ajax({
+        url: "/foodchaser/save_planner",
+        type: "POST",
+        data: jsonData,
+        success: function(){console.log("sent")},
+        error: function(){console.log("failed to save")}
+      });
+    }
+  </script>
+</html>
